@@ -1,0 +1,47 @@
+{
+    // Tests if el_append_pages_to_heap(2) works correctly. Since no
+    // space is allocated in the heap initially, the block for the new
+    // pages should be merged with the existing block.
+    printf("INITIAL HEAP\n");
+    el_print_stats(); printf("\n");
+
+    int ret = el_append_pages_to_heap(2);
+    printf("EXPANDED HEAP, ret: %d\n",ret);
+    el_print_stats(); printf("\n");
+}
+INITIAL HEAP
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  4096}
+  [  0] head @ 0x612000000000 {state: a  size:  4056}
+USED LIST: {length:   0  bytes:     0}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      a
+  size:       4056 (total: 0x1000)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000020
+  foot:       0x612000000ff8
+  foot->size: 4056
+
+EXPANDED HEAP, ret: 1
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  4096}
+  [  0] head @ 0x612000000000 {state: a  size:  4056}
+USED LIST: {length:   0  bytes:     0}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      a
+  size:       4056 (total: 0x1000)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000020
+  foot:       0x612000000ff8
+  foot->size: 4056
+

@@ -1,0 +1,17 @@
+{
+    // Tests if el_append_pages_to_heap(1) works correctly. The heap
+    // has 1 used block after malloc()'ing and no extra
+    // space. Expanding by 1 page gives a new available block and a
+    // larger heap size.
+    void *ptr = el_malloc(EL_PAGE_BYTES-EL_BLOCK_OVERHEAD);
+    printf("HEAP AFTER 1 MALLOC()\n");
+    el_print_stats(); printf("\n");
+
+    int ret = el_append_pages_to_heap(1);
+    printf("EXPANDED HEAP, ret: %d\n",ret);
+    el_print_stats(); printf("\n");
+
+    el_free(ptr);
+    printf("EXPANDED HEAP AFTER FREE\n");
+    el_print_stats(); printf("\n");
+}

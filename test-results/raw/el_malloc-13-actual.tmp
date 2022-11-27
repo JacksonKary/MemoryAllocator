@@ -1,0 +1,92 @@
+{
+    // Tests if heap expansion allows a large-ish malloc that fails
+    // initially to succeed after expansion.
+    void *p1, *p2;
+    p1 = el_malloc(EL_PAGE_BYTES/2); // succeeds
+    p2 = el_malloc(EL_PAGE_BYTES);   // fails
+    printf("p1: %p\np2: %p\n",p1,p2);
+    printf("HEAP AFTER 2 MALLOCs()\n");
+    el_print_stats(); printf("\n");
+
+    int ret = el_append_pages_to_heap(3);
+    p2 = el_malloc(EL_PAGE_BYTES);   // succeds now
+    printf("p1: %p\np2: %p\n",p1,p2);
+    printf("EXPANDED HEAP, ret: %d\n",ret);
+    el_print_stats(); printf("\n");
+
+    el_free(p1);
+    printf("EXPANDED HEAP AFTER 1st FREE\n");
+    el_print_stats(); printf("\n");
+    el_free(p2);
+    printf("EXPANDED HEAP AFTER 2nd FREE\n");
+    el_print_stats(); printf("\n");
+}
+p1: 0x612000000020
+p2: (nil)
+HEAP AFTER 2 MALLOCs()
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  2008}
+  [  0] head @ 0x612000000828 {state: a  size:  1968}
+USED LIST: {length:   1  bytes:  2088}
+  [  0] head @ 0x612000000000 {state: u  size:  2048}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       2048 (total: 0x828)
+  prev:       0x610000000078
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x612000000820
+  foot->size: 2048
+[  1] @ 0x612000000828
+  state:      a
+  size:       1968 (total: 0x7d8)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000848
+  foot:       0x612000000ff8
+  foot->size: 1968
+
+p1: 0x612000000020
+p2: (nil)
+EXPANDED HEAP, ret: 1
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  2008}
+  [  0] head @ 0x612000000828 {state: a  size:  1968}
+USED LIST: {length:   1  bytes:  2088}
+  [  0] head @ 0x612000000000 {state: u  size:  2048}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       2048 (total: 0x828)
+  prev:       0x610000000078
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x612000000820
+  foot->size: 2048
+[  1] @ 0x612000000828
+  state:      a
+  size:       1968 (total: 0x7d8)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000848
+  foot:       0x612000000ff8
+  foot->size: 1968
+
+EXPANDED HEAP AFTER 1st FREE
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  6104}
+  [  0] head @ 0x612000000000 {state: a  size:  4056}
+  [  1] head @ 0x610000000038 {state: E  size:     0}
+USED LIST: {length: 18446744073709551615  bytes: 18446744073709549608}
+  [  0] head @ 0x610000000098 {state: E  size:     0}
+  [  1] head @ (nil) 

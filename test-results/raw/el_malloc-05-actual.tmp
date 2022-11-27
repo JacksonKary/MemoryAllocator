@@ -1,0 +1,1011 @@
+{
+    // Allocates 4 times the frees 4 times in the order that the
+    // allocation occured in. Looks for merging of blocks.
+
+    void *ptr[16] = {};
+    int len = 0;
+
+    ptr[len++] = el_malloc(128);
+    printf("\nMALLOC 0\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(200);
+    printf("\nMALLOC 1\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(64);
+    printf("\nMALLOC 2\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(312);
+    printf("\nMALLOC 3\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    el_free(ptr[0]);
+    printf("\nFREE 0\n"); el_print_stats(); printf("\n");
+
+    el_free(ptr[1]);
+    printf("\nFREE 1\n"); el_print_stats(); printf("\n");
+
+    el_free(ptr[2]);
+    printf("\nFREE 2\n"); el_print_stats(); printf("\n");
+
+    el_free(ptr[3]);
+    printf("\nFREE 3\n"); el_print_stats(); printf("\n");
+}
+
+MALLOC 0
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3928}
+  [  0] head @ 0x6120000000a8 {state: a  size:  3888}
+USED LIST: {length:   1  bytes:   168}
+  [  0] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x610000000078
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      a
+  size:       3888 (total: 0xf58)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x6120000000c8
+  foot:       0x612000000ff8
+  foot->size: 3888
+
+POINTERS
+ptr[ 0]: 0x612000000020
+
+MALLOC 1
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3688}
+  [  0] head @ 0x612000000198 {state: a  size:  3648}
+USED LIST: {length:   2  bytes:   408}
+  [  0] head @ 0x6120000000a8 {state: u  size:   200}
+  [  1] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x6120000000a8
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x610000000078
+  next:       0x612000000000
+  user:       0x6120000000c8
+  foot:       0x612000000190
+  foot->size: 200
+[  2] @ 0x612000000198
+  state:      a
+  size:       3648 (total: 0xe68)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x6120000001b8
+  foot:       0x612000000ff8
+  foot->size: 3648
+
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x6120000000c8
+
+MALLOC 2
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3584}
+  [  0] head @ 0x612000000200 {state: a  size:  3544}
+USED LIST: {length:   3  bytes:   512}
+  [  0] head @ 0x612000000198 {state: u  size:    64}
+  [  1] head @ 0x6120000000a8 {state: u  size:   200}
+  [  2] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x6120000000a8
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x612000000198
+  next:       0x612000000000
+  user:       0x6120000000c8
+  foot:       0x612000000190
+  foot->size: 200
+[  2] @ 0x612000000198
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x610000000078
+  next:       0x6120000000a8
+  user:       0x6120000001b8
+  foot:       0x6120000001f8
+  foot->size: 64
+[  3] @ 0x612000000200
+  state:      a
+  size:       3544 (total: 0xe00)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000220
+  foot:       0x612000000ff8
+  foot->size: 3544
+
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x6120000000c8
+ptr[ 2]: 0x6120000001b8
+
+MALLOC 3
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3232}
+  [  0] head @ 0x612000000360 {state: a  size:  3192}
+USED LIST: {length:   4  bytes:   864}
+  [  0] head @ 0x612000000200 {state: u  size:   312}
+  [  1] head @ 0x612000000198 {state: u  size:    64}
+  [  2] head @ 0x6120000000a8 {state: u  size:   200}
+  [  3] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x6120000000a8
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x612000000198
+  next:       0x612000000000
+  user:       0x6120000000c8
+  foot:       0x612000000190
+  foot->size: 200
+[  2] @ 0x612000000198
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x612000000200
+  next:       0x6120000000a8
+  user:       0x6120000001b8
+  foot:       0x6120000001f8
+  foot->size: 64
+[  3] @ 0x612000000200
+  state:      u
+  size:       312 (total: 0x160)
+  prev:       0x610000000078
+  next:       0x612000000198
+  user:       0x612000000220
+  foot:       0x612000000358
+  foot->size: 312
+[  4] @ 0x612000000360
+  state:      a
+  size:       3192 (total: 0xca0)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000380
+  foot:       0x612000000ff8
+  foot->size: 3192
+
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x6120000000c8
+ptr[ 2]: 0x6120000001b8
+ptr[ 3]: 0x612000000220
+
+FREE 0
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  3400}
+  [  0] head @ 0x612000000000 {state: a  size:   128}
+  [  1] head @ 0x612000000360 {state: a  size:  3192}
+USED LIST: {length:   3  bytes:   696}
+  [  0] head @ 0x612000000200 {state: u  size:   312}
+  [  1] head @ 0x612000000198 {state: u  size:    64}
+  [  2] head @ 0x6120000000a8 {state: u  size:   200}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      a
+  size:       128 (total: 0xa8)
+  prev:       0x610000000018
+  next:       0x612000000360
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x612000000198
+  next:       0x610000000098
+  user:       0x6120000000c8
+  foot:       0x612000000190
+  foot->size: 200
+[  2] @ 0x612000000198
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x612000000200
+  next:       0x6120000000a8
+  user:       0x6120000001b8
+  foot:       0x6120000001f8
+  foot->size: 64
+[  3] @ 0x612000000200
+  state:      u
+  size:       312 (total: 0x160)
+  prev:       0x610000000078
+  next:       0x612000000198
+  user:       0x612000000220
+  foot:       0x612000000358
+  foot->size: 312
+[  4] @ 0x612000000360
+  state:      a
+  size:       3192 (total: 0xca0)
+  prev:       0x612000000000
+  next:       0x610000000038
+  user:       0x612000000380
+  foot:       0x612000000ff8
+  foot->size: 3192
+
+
+FREE 1
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   3  bytes:  3640}
+  [  0] head @ 0x6120000000a8 {state: a  size:   200}
+  [  1] head @ 0x612000000000 {state: a  size:   128}
+  [  2] head @ 0x612000000360 {state: a  size:  3192}
+USED LIST: {length:   2  bytes:   456}
+  [  0] head @ 0x612000000200 {state: u  size:   312}
+  [  1] head @ 0x612000000198 {state: u  size:    64}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      a
+  size:       128 (total: 0xa8)
+  prev:       0x6120000000a8
+  next:       0x612000000360
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      a
+  size:       200 (total: 0xf0)
+  prev:       0x610000000018
+  next:       0x612000000000
+  user:       0x6120000000c8
+  foot:       0x612000000190
+  foot->size: 200
+[  2] @ 0x612000000198
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x612000000200
+  next:       0x610000000098
+  user:       0x6120000001b8
+  foot:       0x6120000001f8
+  foot->size: 64
+[  3] @ 0x612000000200
+  state:      u
+  size:       312 (total: 0x160)
+  prev:       0x610000000078
+  next:       0x612000000198
+  user:       0x612000000220
+  foot:       0x612000000358
+  foot->size: 312
+[  4] @ 0x612000000360
+  state:      a
+  size:       3192 (total: 0xca0)
+  prev:       0x612000000000
+  next:       0x610000000038
+  user:       0x612000000380
+  foot:       0x612000000ff8
+  foot->size: 3192
+
+
+FREE 2
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   4  bytes:  3880}
+  [  0] head @ 0x6120000000a8 {state: a  size:   200}
+  [  1] head @ 0x612000000000 {state: a  size:   128}
+  [  2] head @ 0x612000000360 {state: a  size:  3192}
+  [  3] head @ 0x610000000038 {state: E  size:     0}
+USED LIST: {length:   0  bytes:   112}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      a
+  size:       128 (total: 0xa8)
+  prev:       0x6120000000a8
+  next:       0x612000000360
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      a
+  size:       200 (total: 0xf0)
+  prev:       0x610000000018
+  next:       0x612000000000
+  user:       0x6120000000c8
+  foot:       0x612000000190
+  foot->size: 200
+[  2] @ 0x612000000198
+  state:      a
+  size:       304 (total: 0x158)
+  prev:       0x612000000200
+  next:       0x610000000098
+  user:       0x6120000001b8
+  foot:       0x6120000002e8
+  foot->size: 0
+[  3] @ 0x6120000002f0
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000310
+  foot:       0x612000000310
+  foot->size: 0
+[  4] @ 0x612000000318
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000338
+  foot:       0x612000000338
+  foot->size: 0
+[  5] @ 0x612000000340
+  state:      
+  size:       0 (total: 0x28)
+  prev:       0x138
+  next:       (nil)
+  user:       0x612000000360
+  foot:       0x612000000360
+  foot->size: 3192
+[  6] @ 0x612000000368
+  state:      8
+  size:       97 (total: 0x89)
+  prev:       (nil)
+  next:       0x612000000000
+  user:       0x612000000388
+  foot:       0x6120000003e9
+  foot->size: 0
+[  7] @ 0x6120000003f1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000411
+  foot:       0x612000000411
+  foot->size: 0
+[  8] @ 0x612000000419
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000439
+  foot:       0x612000000439
+  foot->size: 0
+[  9] @ 0x612000000441
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000461
+  foot:       0x612000000461
+  foot->size: 0
+[ 10] @ 0x612000000469
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000489
+  foot:       0x612000000489
+  foot->size: 0
+[ 11] @ 0x612000000491
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000004b1
+  foot:       0x6120000004b1
+  foot->size: 0
+[ 12] @ 0x6120000004b9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000004d9
+  foot:       0x6120000004d9
+  foot->size: 0
+[ 13] @ 0x6120000004e1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000501
+  foot:       0x612000000501
+  foot->size: 0
+[ 14] @ 0x612000000509
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000529
+  foot:       0x612000000529
+  foot->size: 0
+[ 15] @ 0x612000000531
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000551
+  foot:       0x612000000551
+  foot->size: 0
+[ 16] @ 0x612000000559
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000579
+  foot:       0x612000000579
+  foot->size: 0
+[ 17] @ 0x612000000581
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000005a1
+  foot:       0x6120000005a1
+  foot->size: 0
+[ 18] @ 0x6120000005a9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000005c9
+  foot:       0x6120000005c9
+  foot->size: 0
+[ 19] @ 0x6120000005d1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000005f1
+  foot:       0x6120000005f1
+  foot->size: 0
+[ 20] @ 0x6120000005f9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000619
+  foot:       0x612000000619
+  foot->size: 0
+[ 21] @ 0x612000000621
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000641
+  foot:       0x612000000641
+  foot->size: 0
+[ 22] @ 0x612000000649
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000669
+  foot:       0x612000000669
+  foot->size: 0
+[ 23] @ 0x612000000671
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000691
+  foot:       0x612000000691
+  foot->size: 0
+[ 24] @ 0x612000000699
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000006b9
+  foot:       0x6120000006b9
+  foot->size: 0
+[ 25] @ 0x6120000006c1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000006e1
+  foot:       0x6120000006e1
+  foot->size: 0
+[ 26] @ 0x6120000006e9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000709
+  foot:       0x612000000709
+  foot->size: 0
+[ 27] @ 0x612000000711
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000731
+  foot:       0x612000000731
+  foot->size: 0
+[ 28] @ 0x612000000739
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000759
+  foot:       0x612000000759
+  foot->size: 0
+[ 29] @ 0x612000000761
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000781
+  foot:       0x612000000781
+  foot->size: 0
+[ 30] @ 0x612000000789
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000007a9
+  foot:       0x6120000007a9
+  foot->size: 0
+[ 31] @ 0x6120000007b1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000007d1
+  foot:       0x6120000007d1
+  foot->size: 0
+[ 32] @ 0x6120000007d9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000007f9
+  foot:       0x6120000007f9
+  foot->size: 0
+[ 33] @ 0x612000000801
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000821
+  foot:       0x612000000821
+  foot->size: 0
+[ 34] @ 0x612000000829
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000849
+  foot:       0x612000000849
+  foot->size: 0
+[ 35] @ 0x612000000851
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000871
+  foot:       0x612000000871
+  foot->size: 0
+[ 36] @ 0x612000000879
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000899
+  foot:       0x612000000899
+  foot->size: 0
+[ 37] @ 0x6120000008a1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000008c1
+  foot:       0x6120000008c1
+  foot->size: 0
+[ 38] @ 0x6120000008c9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000008e9
+  foot:       0x6120000008e9
+  foot->size: 0
+[ 39] @ 0x6120000008f1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000911
+  foot:       0x612000000911
+  foot->size: 0
+[ 40] @ 0x612000000919
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000939
+  foot:       0x612000000939
+  foot->size: 0
+[ 41] @ 0x612000000941
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000961
+  foot:       0x612000000961
+  foot->size: 0
+[ 42] @ 0x612000000969
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000989
+  foot:       0x612000000989
+  foot->size: 0
+[ 43] @ 0x612000000991
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000009b1
+  foot:       0x6120000009b1
+  foot->size: 0
+[ 44] @ 0x6120000009b9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x6120000009d9
+  foot:       0x6120000009d9
+  foot->size: 0
+[ 45] @ 0x6120000009e1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000a01
+  foot:       0x612000000a01
+  foot->size: 0
+[ 46] @ 0x612000000a09
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000a29
+  foot:       0x612000000a29
+  foot->size: 0
+[ 47] @ 0x612000000a31
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000a51
+  foot:       0x612000000a51
+  foot->size: 0
+[ 48] @ 0x612000000a59
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000a79
+  foot:       0x612000000a79
+  foot->size: 0
+[ 49] @ 0x612000000a81
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000aa1
+  foot:       0x612000000aa1
+  foot->size: 0
+[ 50] @ 0x612000000aa9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000ac9
+  foot:       0x612000000ac9
+  foot->size: 0
+[ 51] @ 0x612000000ad1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000af1
+  foot:       0x612000000af1
+  foot->size: 0
+[ 52] @ 0x612000000af9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000b19
+  foot:       0x612000000b19
+  foot->size: 0
+[ 53] @ 0x612000000b21
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000b41
+  foot:       0x612000000b41
+  foot->size: 0
+[ 54] @ 0x612000000b49
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000b69
+  foot:       0x612000000b69
+  foot->size: 0
+[ 55] @ 0x612000000b71
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000b91
+  foot:       0x612000000b91
+  foot->size: 0
+[ 56] @ 0x612000000b99
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000bb9
+  foot:       0x612000000bb9
+  foot->size: 0
+[ 57] @ 0x612000000bc1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000be1
+  foot:       0x612000000be1
+  foot->size: 0
+[ 58] @ 0x612000000be9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000c09
+  foot:       0x612000000c09
+  foot->size: 0
+[ 59] @ 0x612000000c11
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000c31
+  foot:       0x612000000c31
+  foot->size: 0
+[ 60] @ 0x612000000c39
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000c59
+  foot:       0x612000000c59
+  foot->size: 0
+[ 61] @ 0x612000000c61
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000c81
+  foot:       0x612000000c81
+  foot->size: 0
+[ 62] @ 0x612000000c89
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000ca9
+  foot:       0x612000000ca9
+  foot->size: 0
+[ 63] @ 0x612000000cb1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000cd1
+  foot:       0x612000000cd1
+  foot->size: 0
+[ 64] @ 0x612000000cd9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000cf9
+  foot:       0x612000000cf9
+  foot->size: 0
+[ 65] @ 0x612000000d01
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000d21
+  foot:       0x612000000d21
+  foot->size: 0
+[ 66] @ 0x612000000d29
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000d49
+  foot:       0x612000000d49
+  foot->size: 0
+[ 67] @ 0x612000000d51
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000d71
+  foot:       0x612000000d71
+  foot->size: 0
+[ 68] @ 0x612000000d79
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000d99
+  foot:       0x612000000d99
+  foot->size: 0
+[ 69] @ 0x612000000da1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000dc1
+  foot:       0x612000000dc1
+  foot->size: 0
+[ 70] @ 0x612000000dc9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000de9
+  foot:       0x612000000de9
+  foot->size: 0
+[ 71] @ 0x612000000df1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000e11
+  foot:       0x612000000e11
+  foot->size: 0
+[ 72] @ 0x612000000e19
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000e39
+  foot:       0x612000000e39
+  foot->size: 0
+[ 73] @ 0x612000000e41
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000e61
+  foot:       0x612000000e61
+  foot->size: 0
+[ 74] @ 0x612000000e69
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000e89
+  foot:       0x612000000e89
+  foot->size: 0
+[ 75] @ 0x612000000e91
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000eb1
+  foot:       0x612000000eb1
+  foot->size: 0
+[ 76] @ 0x612000000eb9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000ed9
+  foot:       0x612000000ed9
+  foot->size: 0
+[ 77] @ 0x612000000ee1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000f01
+  foot:       0x612000000f01
+  foot->size: 0
+[ 78] @ 0x612000000f09
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000f29
+  foot:       0x612000000f29
+  foot->size: 0
+[ 79] @ 0x612000000f31
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000f51
+  foot:       0x612000000f51
+  foot->size: 0
+[ 80] @ 0x612000000f59
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000f79
+  foot:       0x612000000f79
+  foot->size: 0
+[ 81] @ 0x612000000f81
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000fa1
+  foot:       0x612000000fa1
+  foot->size: 0
+[ 82] @ 0x612000000fa9
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000fc9
+  foot:       0x612000000fc9
+  foot->size: 0
+[ 83] @ 0x612000000fd1
+  state:      
+  size:       0 (total: 0x28)
+  prev:       (nil)
+  next:       (nil)
+  user:       0x612000000ff1
+  foot:       0x612000000ff1
+  foot->size: 8646911284551352320
+[ 84] @ 

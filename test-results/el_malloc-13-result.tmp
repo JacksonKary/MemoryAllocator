@@ -1,0 +1,290 @@
+* (TEST 13) Append Pages 3
+COMMENTS:
+** program: ./test_el_malloc "Append Pages 3"
+
+** --- Failure messages --- 
+- FAILURE(139) due to SIGSEGV (segmentation fault) from OS
+- FAILURE: Output Mismatch at lines marked
+
+** --- Side by Side Differences ---
+- Expect output in: test-results/raw/el_malloc-13-expect.tmp
+- Actual output in: test-results/raw/el_malloc-13-actual.tmp
+- Differing lines have a character like '|' '>' or '<' in the middle
+#+BEGIN_SRC sbs-diff
+==== EXPECT ====                                                         ==== ACTUAL ====                                                      
+{                                                                        {
+    // Tests if heap expansion allows a large-ish malloc that fails          // Tests if heap expansion allows a large-ish malloc that fails
+    // initially to succeed after expansion.                                 // initially to succeed after expansion.
+    void *p1, *p2;                                                           void *p1, *p2;
+    p1 = el_malloc(EL_PAGE_BYTES/2); // succeeds                             p1 = el_malloc(EL_PAGE_BYTES/2); // succeeds
+    p2 = el_malloc(EL_PAGE_BYTES);   // fails                                p2 = el_malloc(EL_PAGE_BYTES);   // fails
+    printf("p1: %p\np2: %p\n",p1,p2);                                        printf("p1: %p\np2: %p\n",p1,p2);
+    printf("HEAP AFTER 2 MALLOCs()\n");                                      printf("HEAP AFTER 2 MALLOCs()\n");
+    el_print_stats(); printf("\n");                                          el_print_stats(); printf("\n");
+
+    int ret = el_append_pages_to_heap(3);                                    int ret = el_append_pages_to_heap(3);
+    p2 = el_malloc(EL_PAGE_BYTES);   // succeds now                          p2 = el_malloc(EL_PAGE_BYTES);   // succeds now
+    printf("p1: %p\np2: %p\n",p1,p2);                                        printf("p1: %p\np2: %p\n",p1,p2);
+    printf("EXPANDED HEAP, ret: %d\n",ret);                                  printf("EXPANDED HEAP, ret: %d\n",ret);
+    el_print_stats(); printf("\n");                                          el_print_stats(); printf("\n");
+
+    el_free(p1);                                                             el_free(p1);
+    printf("EXPANDED HEAP AFTER 1st FREE\n");                                printf("EXPANDED HEAP AFTER 1st FREE\n");
+    el_print_stats(); printf("\n");                                          el_print_stats(); printf("\n");
+    el_free(p2);                                                             el_free(p2);
+    printf("EXPANDED HEAP AFTER 2nd FREE\n");                                printf("EXPANDED HEAP AFTER 2nd FREE\n");
+    el_print_stats(); printf("\n");                                          el_print_stats(); printf("\n");
+}                                                                        }
+p1: 0x612000000020                                                       p1: 0x612000000020
+p2: (nil)                                                                p2: (nil)
+HEAP AFTER 2 MALLOCs()                                                   HEAP AFTER 2 MALLOCs()
+HEAP STATS (overhead per node: 40)                                       HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                              heap_start:  0x612000000000
+heap_end:    0x612000001000                                              heap_end:    0x612000001000
+total_bytes: 4096                                                        total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  2008}                              AVAILABLE LIST: {length:   1  bytes:  2008}
+  [  0] head @ 0x612000000828 {state: a  size:  1968}                      [  0] head @ 0x612000000828 {state: a  size:  1968}
+USED LIST: {length:   1  bytes:  2088}                                   USED LIST: {length:   1  bytes:  2088}
+  [  0] head @ 0x612000000000 {state: u  size:  2048}                      [  0] head @ 0x612000000000 {state: u  size:  2048}
+HEAP BLOCKS:                                                             HEAP BLOCKS:
+[  0] @ 0x612000000000                                                   [  0] @ 0x612000000000
+  state:      u                                                            state:      u
+  size:       2048 (total: 0x828)                                          size:       2048 (total: 0x828)
+  prev:       0x610000000078                                               prev:       0x610000000078
+  next:       0x610000000098                                               next:       0x610000000098
+  user:       0x612000000020                                               user:       0x612000000020
+  foot:       0x612000000820                                               foot:       0x612000000820
+  foot->size: 2048                                                         foot->size: 2048
+[  1] @ 0x612000000828                                                   [  1] @ 0x612000000828
+  state:      a                                                            state:      a
+  size:       1968 (total: 0x7d8)                                          size:       1968 (total: 0x7d8)
+  prev:       0x610000000018                                               prev:       0x610000000018
+  next:       0x610000000038                                               next:       0x610000000038
+  user:       0x612000000848                                               user:       0x612000000848
+  foot:       0x612000000ff8                                               foot:       0x612000000ff8
+  foot->size: 1968                                                         foot->size: 1968
+
+p1: 0x612000000020                                                       p1: 0x612000000020
+p2: 0x612000000848                                                     | p2: (nil)
+EXPANDED HEAP, ret: 0                                                  | EXPANDED HEAP, ret: 1
+HEAP STATS (overhead per node: 40)                                       HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                              heap_start:  0x612000000000
+heap_end:    0x612000004000                                            | heap_end:    0x612000001000
+total_bytes: 16384                                                     | total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes: 10160}                            | AVAILABLE LIST: {length:   1  bytes:  2008}
+  [  0] head @ 0x612000001850 {state: a  size: 10120}                  |   [  0] head @ 0x612000000828 {state: a  size:  1968}
+USED LIST: {length:   2  bytes:  6224}                                 | USED LIST: {length:   1  bytes:  2088}
+  [  0] head @ 0x612000000828 {state: u  size:  4096}                  |   [  0] head @ 0x612000000000 {state: u  size:  2048}
+  [  1] head @ 0x612000000000 {state: u  size:  2048}                  <
+HEAP BLOCKS:                                                             HEAP BLOCKS:
+[  0] @ 0x612000000000                                                   [  0] @ 0x612000000000
+  state:      u                                                            state:      u
+  size:       2048 (total: 0x828)                                          size:       2048 (total: 0x828)
+  prev:       0x612000000828                                           |   prev:       0x610000000078
+  next:       0x610000000098                                               next:       0x610000000098
+  user:       0x612000000020                                               user:       0x612000000020
+  foot:       0x612000000820                                               foot:       0x612000000820
+  foot->size: 2048                                                         foot->size: 2048
+[  1] @ 0x612000000828                                                   [  1] @ 0x612000000828
+  state:      u                                                        <
+  size:       4096 (total: 0x1028)                                     <
+  prev:       0x610000000078                                           <
+  next:       0x612000000000                                           <
+  user:       0x612000000848                                           <
+  foot:       0x612000001848                                           <
+  foot->size: 4096                                                     <
+[  2] @ 0x612000001850                                                 <
+  state:      a                                                            state:      a
+  size:       10120 (total: 0x27b0)                                    |   size:       1968 (total: 0x7d8)
+  prev:       0x610000000018                                               prev:       0x610000000018
+  next:       0x610000000038                                               next:       0x610000000038
+  user:       0x612000001870                                           <
+  foot:       0x612000003ff8                                           <
+  foot->size: 10120                                                    <
+                                                                       <
+EXPANDED HEAP AFTER 1st FREE                                           <
+HEAP STATS (overhead per node: 40)                                     <
+heap_start:  0x612000000000                                            <
+heap_end:    0x612000004000                                            <
+total_bytes: 16384                                                     <
+AVAILABLE LIST: {length:   2  bytes: 12248}                            <
+  [  0] head @ 0x612000000000 {state: a  size:  2048}                  <
+  [  1] head @ 0x612000001850 {state: a  size: 10120}                  <
+USED LIST: {length:   1  bytes:  4136}                                 <
+  [  0] head @ 0x612000000828 {state: u  size:  4096}                  <
+HEAP BLOCKS:                                                           <
+[  0] @ 0x612000000000                                                 <
+  state:      a                                                        <
+  size:       2048 (total: 0x828)                                      <
+  prev:       0x610000000018                                           <
+  next:       0x612000001850                                           <
+  user:       0x612000000020                                           <
+  foot:       0x612000000820                                           <
+  foot->size: 2048                                                     <
+[  1] @ 0x612000000828                                                 <
+  state:      u                                                        <
+  size:       4096 (total: 0x1028)                                     <
+  prev:       0x610000000078                                           <
+  next:       0x610000000098                                           <
+  user:       0x612000000848                                               user:       0x612000000848
+  foot:       0x612000001848                                           |   foot:       0x612000000ff8
+  foot->size: 4096                                                     |   foot->size: 1968
+[  2] @ 0x612000001850                                                 <
+  state:      a                                                        <
+  size:       10120 (total: 0x27b0)                                    <
+  prev:       0x612000000000                                           <
+  next:       0x610000000038                                           <
+  user:       0x612000001870                                           <
+  foot:       0x612000003ff8                                           <
+  foot->size: 10120                                                    <
+
+EXPANDED HEAP AFTER 2nd FREE                                           | EXPANDED HEAP AFTER 1st FREE
+HEAP STATS (overhead per node: 40)                                       HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                              heap_start:  0x612000000000
+heap_end:    0x612000004000                                            | heap_end:    0x612000001000
+total_bytes: 16384                                                     | total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes: 16384}                            | AVAILABLE LIST: {length:   2  bytes:  6104}
+  [  0] head @ 0x612000000000 {state: a  size: 16344}                  |   [  0] head @ 0x612000000000 {state: a  size:  4056}
+USED LIST: {length:   0  bytes:     0}                                 |   [  1] head @ 0x610000000038 {state: E  size:     0}
+HEAP BLOCKS:                                                           | USED LIST: {length: 18446744073709551615  bytes: 18446744073709549608}
+[  0] @ 0x612000000000                                                 |   [  0] head @ 0x610000000098 {state: E  size:     0}
+  state:      a                                                        |   [  1] head @ (nil) 
+  size:       16344 (total: 0x4000)                                    <
+  prev:       0x610000000018                                           <
+  next:       0x610000000038                                           <
+  user:       0x612000000020                                           <
+  foot:       0x612000003ff8                                           <
+  foot->size: 16344                                                    <
+                                                                       <
+#+END_SRC
+
+** --- Line Differences ---
+EXPECT:  54) p2: 0x612000000848
+EXPECT:  55) EXPANDED HEAP, ret: 0
+ACTUAL:  54) p2: (nil)
+ACTUAL:  55) EXPANDED HEAP, ret: 1
+EXPECT:  58) heap_end:    0x612000004000
+EXPECT:  59) total_bytes: 16384
+EXPECT:  60) AVAILABLE LIST: {length:   1  bytes: 10160}
+EXPECT:  61)   [  0] head @ 0x612000001850 {state: a  size: 10120}
+EXPECT:  62) USED LIST: {length:   2  bytes:  6224}
+EXPECT:  63)   [  0] head @ 0x612000000828 {state: u  size:  4096}
+EXPECT:  64)   [  1] head @ 0x612000000000 {state: u  size:  2048}
+ACTUAL:  58) heap_end:    0x612000001000
+ACTUAL:  59) total_bytes: 4096
+ACTUAL:  60) AVAILABLE LIST: {length:   1  bytes:  2008}
+ACTUAL:  61)   [  0] head @ 0x612000000828 {state: a  size:  1968}
+ACTUAL:  62) USED LIST: {length:   1  bytes:  2088}
+ACTUAL:  63)   [  0] head @ 0x612000000000 {state: u  size:  2048}
+EXPECT:  69)   prev:       0x612000000828
+ACTUAL:  68)   prev:       0x610000000078
+EXPECT:  75)   state:      u
+EXPECT:  76)   size:       4096 (total: 0x1028)
+EXPECT:  77)   prev:       0x610000000078
+EXPECT:  78)   next:       0x612000000000
+EXPECT:  79)   user:       0x612000000848
+EXPECT:  80)   foot:       0x612000001848
+EXPECT:  81)   foot->size: 4096
+EXPECT:  82) [  2] @ 0x612000001850
+EXPECT:  84)   size:       10120 (total: 0x27b0)
+ACTUAL:  75)   size:       1968 (total: 0x7d8)
+EXPECT:  87)   user:       0x612000001870
+EXPECT:  88)   foot:       0x612000003ff8
+EXPECT:  89)   foot->size: 10120
+EXPECT:  90) 
+EXPECT:  91) EXPANDED HEAP AFTER 1st FREE
+EXPECT:  92) HEAP STATS (overhead per node: 40)
+EXPECT:  93) heap_start:  0x612000000000
+EXPECT:  94) heap_end:    0x612000004000
+EXPECT:  95) total_bytes: 16384
+EXPECT:  96) AVAILABLE LIST: {length:   2  bytes: 12248}
+EXPECT:  97)   [  0] head @ 0x612000000000 {state: a  size:  2048}
+EXPECT:  98)   [  1] head @ 0x612000001850 {state: a  size: 10120}
+EXPECT:  99) USED LIST: {length:   1  bytes:  4136}
+EXPECT: 100)   [  0] head @ 0x612000000828 {state: u  size:  4096}
+EXPECT: 101) HEAP BLOCKS:
+EXPECT: 102) [  0] @ 0x612000000000
+EXPECT: 103)   state:      a
+EXPECT: 104)   size:       2048 (total: 0x828)
+EXPECT: 105)   prev:       0x610000000018
+EXPECT: 106)   next:       0x612000001850
+EXPECT: 107)   user:       0x612000000020
+EXPECT: 108)   foot:       0x612000000820
+EXPECT: 109)   foot->size: 2048
+EXPECT: 110) [  1] @ 0x612000000828
+EXPECT: 111)   state:      u
+EXPECT: 112)   size:       4096 (total: 0x1028)
+EXPECT: 113)   prev:       0x610000000078
+EXPECT: 114)   next:       0x610000000098
+EXPECT: 116)   foot:       0x612000001848
+EXPECT: 117)   foot->size: 4096
+EXPECT: 118) [  2] @ 0x612000001850
+EXPECT: 119)   state:      a
+EXPECT: 120)   size:       10120 (total: 0x27b0)
+EXPECT: 121)   prev:       0x612000000000
+EXPECT: 122)   next:       0x610000000038
+EXPECT: 123)   user:       0x612000001870
+EXPECT: 124)   foot:       0x612000003ff8
+EXPECT: 125)   foot->size: 10120
+ACTUAL:  79)   foot:       0x612000000ff8
+ACTUAL:  80)   foot->size: 1968
+EXPECT: 127) EXPANDED HEAP AFTER 2nd FREE
+ACTUAL:  82) EXPANDED HEAP AFTER 1st FREE
+EXPECT: 130) heap_end:    0x612000004000
+EXPECT: 131) total_bytes: 16384
+EXPECT: 132) AVAILABLE LIST: {length:   1  bytes: 16384}
+EXPECT: 133)   [  0] head @ 0x612000000000 {state: a  size: 16344}
+EXPECT: 134) USED LIST: {length:   0  bytes:     0}
+EXPECT: 135) HEAP BLOCKS:
+EXPECT: 136) [  0] @ 0x612000000000
+EXPECT: 137)   state:      a
+EXPECT: 138)   size:       16344 (total: 0x4000)
+EXPECT: 139)   prev:       0x610000000018
+EXPECT: 140)   next:       0x610000000038
+EXPECT: 141)   user:       0x612000000020
+EXPECT: 142)   foot:       0x612000003ff8
+EXPECT: 143)   foot->size: 16344
+EXPECT: 144) 
+ACTUAL:  85) heap_end:    0x612000001000
+ACTUAL:  86) total_bytes: 4096
+ACTUAL:  87) AVAILABLE LIST: {length:   2  bytes:  6104}
+ACTUAL:  88)   [  0] head @ 0x612000000000 {state: a  size:  4056}
+ACTUAL:  89)   [  1] head @ 0x610000000038 {state: E  size:     0}
+ACTUAL:  90) USED LIST: {length: 18446744073709551615  bytes: 18446744073709549608}
+ACTUAL:  91)   [  0] head @ 0x610000000098 {state: E  size:     0}
+ACTUAL:  92)   [  1] head @ (nil) 
+
+--- Valgrind Log from: test-results/raw/el_malloc-13-valgrd.tmp ---
+==2798218== Memcheck, a memory error detector
+==2798218== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2798218== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==2798218== Command: ./test_el_malloc Append\ Pages\ 3
+==2798218== Parent PID: 2798217
+==2798218== 
+==2798218== Invalid read of size 8
+==2798218==    at 0x10A9C4: el_print_blocklist (el_malloc.c:159)
+==2798218==    by 0x10ABB0: el_print_stats (el_malloc.c:222)
+==2798218==    by 0x10A84D: main (test_el_malloc.c:456)
+==2798218==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==2798218== 
+==2798218== 
+==2798218== Process terminating with default action of signal 11 (SIGSEGV)
+==2798218==  Access not within mapped region at address 0x0
+==2798218==    at 0x10A9C4: el_print_blocklist (el_malloc.c:159)
+==2798218==    by 0x10ABB0: el_print_stats (el_malloc.c:222)
+==2798218==    by 0x10A84D: main (test_el_malloc.c:456)
+==2798218==  If you believe this happened as a result of a stack
+==2798218==  overflow in your program's main thread (unlikely but
+==2798218==  possible), you can try to increase the size of the
+==2798218==  main thread stack using the --main-stacksize= flag.
+==2798218==  The main thread stack size used in this run was 8388608.
+==2798218== 
+==2798218== HEAP SUMMARY:
+==2798218==     in use at exit: 0 bytes in 0 blocks
+==2798218==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==2798218== 
+==2798218== All heap blocks were freed -- no leaks are possible
+==2798218== 
+==2798218== For lists of detected and suppressed errors, rerun with: -s
+==2798218== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+

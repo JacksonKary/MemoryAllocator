@@ -1,0 +1,631 @@
+{
+    // Stress testing with many malloc()'s / free()'s. More thoroughly
+    // tests combinations of calls and sequences. Implementations that
+    // may have appeared correct in simple tests may buckle under such
+    // added stress.
+
+    void *ptr[16] = {};
+    int len = 0;
+
+    ptr[len++] = el_malloc(128);
+    ptr[len++] = el_malloc(256);
+    ptr[len++] = el_malloc(64);
+    ptr[len++] = el_malloc(200);
+    printf("MALLOC 1-4\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    el_free(ptr[2]);    ptr[2] = NULL;
+    printf("\nFREE 2\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(64);
+    printf("\nMALLOC 5\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    el_free(ptr[1]);    ptr[1] = NULL;
+    printf("\nFREE 1\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(50);
+    ptr[len++] = el_malloc(50);
+    printf("\nMALLOC 6-7\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(100);
+    printf("\nMALLOC 8\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    el_free(ptr[5]);   ptr[5] = NULL;
+    el_free(ptr[0]);   ptr[0] = NULL;
+    el_free(ptr[6]);   ptr[6] = NULL;
+    printf("\nFREE 5,0,6\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(200);
+    ptr[len++] = el_malloc(512);
+    ptr[len++] = el_malloc(16);
+    ptr[len++] = el_malloc(32);
+    printf("\nMALLOC 9,10,11\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+}
+MALLOC 1-4
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3288}
+  [  0] head @ 0x612000000328 {state: a  size:  3248}
+USED LIST: {length:   4  bytes:   808}
+  [  0] head @ 0x612000000238 {state: u  size:   200}
+  [  1] head @ 0x6120000001d0 {state: u  size:    64}
+  [  2] head @ 0x6120000000a8 {state: u  size:   256}
+  [  3] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x6120000000a8
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      u
+  size:       256 (total: 0x128)
+  prev:       0x6120000001d0
+  next:       0x612000000000
+  user:       0x6120000000c8
+  foot:       0x6120000001c8
+  foot->size: 256
+[  2] @ 0x6120000001d0
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x612000000238
+  next:       0x6120000000a8
+  user:       0x6120000001f0
+  foot:       0x612000000230
+  foot->size: 64
+[  3] @ 0x612000000238
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x610000000078
+  next:       0x6120000001d0
+  user:       0x612000000258
+  foot:       0x612000000320
+  foot->size: 200
+[  4] @ 0x612000000328
+  state:      a
+  size:       3248 (total: 0xcd8)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000348
+  foot:       0x612000000ff8
+  foot->size: 3248
+
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x6120000000c8
+ptr[ 2]: 0x6120000001f0
+ptr[ 3]: 0x612000000258
+
+FREE 2
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  3392}
+  [  0] head @ 0x6120000001d0 {state: a  size:    64}
+  [  1] head @ 0x612000000328 {state: a  size:  3248}
+USED LIST: {length:   3  bytes:   704}
+  [  0] head @ 0x612000000238 {state: u  size:   200}
+  [  1] head @ 0x6120000000a8 {state: u  size:   256}
+  [  2] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x6120000000a8
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      u
+  size:       256 (total: 0x128)
+  prev:       0x612000000238
+  next:       0x612000000000
+  user:       0x6120000000c8
+  foot:       0x6120000001c8
+  foot->size: 256
+[  2] @ 0x6120000001d0
+  state:      a
+  size:       64 (total: 0x68)
+  prev:       0x610000000018
+  next:       0x612000000328
+  user:       0x6120000001f0
+  foot:       0x612000000230
+  foot->size: 64
+[  3] @ 0x612000000238
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x610000000078
+  next:       0x6120000000a8
+  user:       0x612000000258
+  foot:       0x612000000320
+  foot->size: 200
+[  4] @ 0x612000000328
+  state:      a
+  size:       3248 (total: 0xcd8)
+  prev:       0x6120000001d0
+  next:       0x610000000038
+  user:       0x612000000348
+  foot:       0x612000000ff8
+  foot->size: 3248
+
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x6120000000c8
+ptr[ 2]: (nil)
+ptr[ 3]: 0x612000000258
+
+MALLOC 5
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3288}
+  [  0] head @ 0x612000000328 {state: a  size:  3248}
+USED LIST: {length:   4  bytes:   808}
+  [  0] head @ 0x6120000001d0 {state: u  size:    64}
+  [  1] head @ 0x612000000238 {state: u  size:   200}
+  [  2] head @ 0x6120000000a8 {state: u  size:   256}
+  [  3] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x6120000000a8
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      u
+  size:       256 (total: 0x128)
+  prev:       0x612000000238
+  next:       0x612000000000
+  user:       0x6120000000c8
+  foot:       0x6120000001c8
+  foot->size: 256
+[  2] @ 0x6120000001d0
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x610000000078
+  next:       0x612000000238
+  user:       0x6120000001f0
+  foot:       0x612000000230
+  foot->size: 64
+[  3] @ 0x612000000238
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x6120000001d0
+  next:       0x6120000000a8
+  user:       0x612000000258
+  foot:       0x612000000320
+  foot->size: 200
+[  4] @ 0x612000000328
+  state:      a
+  size:       3248 (total: 0xcd8)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000348
+  foot:       0x612000000ff8
+  foot->size: 3248
+
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x6120000000c8
+ptr[ 2]: (nil)
+ptr[ 3]: 0x612000000258
+ptr[ 4]: 0x6120000001f0
+
+FREE 1
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  3584}
+  [  0] head @ 0x6120000000a8 {state: a  size:   256}
+  [  1] head @ 0x612000000328 {state: a  size:  3248}
+USED LIST: {length:   3  bytes:   512}
+  [  0] head @ 0x6120000001d0 {state: u  size:    64}
+  [  1] head @ 0x612000000238 {state: u  size:   200}
+  [  2] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x612000000238
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      a
+  size:       256 (total: 0x128)
+  prev:       0x610000000018
+  next:       0x612000000328
+  user:       0x6120000000c8
+  foot:       0x6120000001c8
+  foot->size: 256
+[  2] @ 0x6120000001d0
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x610000000078
+  next:       0x612000000238
+  user:       0x6120000001f0
+  foot:       0x612000000230
+  foot->size: 64
+[  3] @ 0x612000000238
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x6120000001d0
+  next:       0x612000000000
+  user:       0x612000000258
+  foot:       0x612000000320
+  foot->size: 200
+[  4] @ 0x612000000328
+  state:      a
+  size:       3248 (total: 0xcd8)
+  prev:       0x6120000000a8
+  next:       0x610000000038
+  user:       0x612000000348
+  foot:       0x612000000ff8
+  foot->size: 3248
+
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: (nil)
+ptr[ 2]: (nil)
+ptr[ 3]: 0x612000000258
+ptr[ 4]: 0x6120000001f0
+
+MALLOC 6-7
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  3404}
+  [  0] head @ 0x61200000015c {state: a  size:    76}
+  [  1] head @ 0x612000000328 {state: a  size:  3248}
+USED LIST: {length:   5  bytes:   692}
+  [  0] head @ 0x612000000102 {state: u  size:    50}
+  [  1] head @ 0x6120000000a8 {state: u  size:    50}
+  [  2] head @ 0x6120000001d0 {state: u  size:    64}
+  [  3] head @ 0x612000000238 {state: u  size:   200}
+  [  4] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x612000000238
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      u
+  size:       50 (total: 0x5a)
+  prev:       0x612000000102
+  next:       0x6120000001d0
+  user:       0x6120000000c8
+  foot:       0x6120000000fa
+  foot->size: 50
+[  2] @ 0x612000000102
+  state:      u
+  size:       50 (total: 0x5a)
+  prev:       0x610000000078
+  next:       0x6120000000a8
+  user:       0x612000000122
+  foot:       0x612000000154
+  foot->size: 50
+[  3] @ 0x61200000015c
+  state:      a
+  size:       76 (total: 0x74)
+  prev:       0x610000000018
+  next:       0x612000000328
+  user:       0x61200000017c
+  foot:       0x6120000001c8
+  foot->size: 76
+[  4] @ 0x6120000001d0
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x6120000000a8
+  next:       0x612000000238
+  user:       0x6120000001f0
+  foot:       0x612000000230
+  foot->size: 64
+[  5] @ 0x612000000238
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x6120000001d0
+  next:       0x612000000000
+  user:       0x612000000258
+  foot:       0x612000000320
+  foot->size: 200
+[  6] @ 0x612000000328
+  state:      a
+  size:       3248 (total: 0xcd8)
+  prev:       0x61200000015c
+  next:       0x610000000038
+  user:       0x612000000348
+  foot:       0x612000000ff8
+  foot->size: 3248
+
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: (nil)
+ptr[ 2]: (nil)
+ptr[ 3]: 0x612000000258
+ptr[ 4]: 0x6120000001f0
+ptr[ 5]: 0x6120000000c8
+ptr[ 6]: 0x612000000122
+
+MALLOC 8
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  3264}
+  [  0] head @ 0x6120000003b4 {state: a  size:  3108}
+  [  1] head @ 0x61200000015c {state: a  size:    76}
+USED LIST: {length:   6  bytes:   832}
+  [  0] head @ 0x612000000328 {state: u  size:   100}
+  [  1] head @ 0x612000000102 {state: u  size:    50}
+  [  2] head @ 0x6120000000a8 {state: u  size:    50}
+  [  3] head @ 0x6120000001d0 {state: u  size:    64}
+  [  4] head @ 0x612000000238 {state: u  size:   200}
+  [  5] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x612000000238
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      u
+  size:       50 (total: 0x5a)
+  prev:       0x612000000102
+  next:       0x6120000001d0
+  user:       0x6120000000c8
+  foot:       0x6120000000fa
+  foot->size: 50
+[  2] @ 0x612000000102
+  state:      u
+  size:       50 (total: 0x5a)
+  prev:       0x612000000328
+  next:       0x6120000000a8
+  user:       0x612000000122
+  foot:       0x612000000154
+  foot->size: 50
+[  3] @ 0x61200000015c
+  state:      a
+  size:       76 (total: 0x74)
+  prev:       0x6120000003b4
+  next:       0x610000000038
+  user:       0x61200000017c
+  foot:       0x6120000001c8
+  foot->size: 76
+[  4] @ 0x6120000001d0
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x6120000000a8
+  next:       0x612000000238
+  user:       0x6120000001f0
+  foot:       0x612000000230
+  foot->size: 64
+[  5] @ 0x612000000238
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x6120000001d0
+  next:       0x612000000000
+  user:       0x612000000258
+  foot:       0x612000000320
+  foot->size: 200
+[  6] @ 0x612000000328
+  state:      u
+  size:       100 (total: 0x8c)
+  prev:       0x610000000078
+  next:       0x612000000102
+  user:       0x612000000348
+  foot:       0x6120000003ac
+  foot->size: 100
+[  7] @ 0x6120000003b4
+  state:      a
+  size:       3108 (total: 0xc4c)
+  prev:       0x610000000018
+  next:       0x61200000015c
+  user:       0x6120000003d4
+  foot:       0x612000000ff8
+  foot->size: 3108
+
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: (nil)
+ptr[ 2]: (nil)
+ptr[ 3]: 0x612000000258
+ptr[ 4]: 0x6120000001f0
+ptr[ 5]: 0x6120000000c8
+ptr[ 6]: 0x612000000122
+ptr[ 7]: 0x612000000348
+
+FREE 5,0,6
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  3612}
+  [  0] head @ 0x612000000000 {state: a  size:   424}
+  [  1] head @ 0x6120000003b4 {state: a  size:  3108}
+USED LIST: {length:   3  bytes:   484}
+  [  0] head @ 0x612000000328 {state: u  size:   100}
+  [  1] head @ 0x6120000001d0 {state: u  size:    64}
+  [  2] head @ 0x612000000238 {state: u  size:   200}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      a
+  size:       424 (total: 0x1d0)
+  prev:       0x610000000018
+  next:       0x6120000003b4
+  user:       0x612000000020
+  foot:       0x6120000001c8
+  foot->size: 424
+[  1] @ 0x6120000001d0
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x612000000328
+  next:       0x612000000238
+  user:       0x6120000001f0
+  foot:       0x612000000230
+  foot->size: 64
+[  2] @ 0x612000000238
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x6120000001d0
+  next:       0x610000000098
+  user:       0x612000000258
+  foot:       0x612000000320
+  foot->size: 200
+[  3] @ 0x612000000328
+  state:      u
+  size:       100 (total: 0x8c)
+  prev:       0x610000000078
+  next:       0x6120000001d0
+  user:       0x612000000348
+  foot:       0x6120000003ac
+  foot->size: 100
+[  4] @ 0x6120000003b4
+  state:      a
+  size:       3108 (total: 0xc4c)
+  prev:       0x612000000000
+  next:       0x610000000038
+  user:       0x6120000003d4
+  foot:       0x612000000ff8
+  foot->size: 3108
+
+POINTERS
+ptr[ 0]: (nil)
+ptr[ 1]: (nil)
+ptr[ 2]: (nil)
+ptr[ 3]: 0x612000000258
+ptr[ 4]: 0x6120000001f0
+ptr[ 5]: (nil)
+ptr[ 6]: (nil)
+ptr[ 7]: 0x612000000348
+
+MALLOC 9,10,11
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  2692}
+  [  0] head @ 0x61200000065c {state: a  size:  2428}
+  [  1] head @ 0x6120000000f0 {state: a  size:   184}
+USED LIST: {length:   7  bytes:  1404}
+  [  0] head @ 0x612000000614 {state: u  size:    32}
+  [  1] head @ 0x6120000005dc {state: u  size:    16}
+  [  2] head @ 0x6120000003b4 {state: u  size:   512}
+  [  3] head @ 0x612000000000 {state: u  size:   200}
+  [  4] head @ 0x612000000328 {state: u  size:   100}
+  [  5] head @ 0x6120000001d0 {state: u  size:    64}
+  [  6] head @ 0x612000000238 {state: u  size:   200}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x6120000003b4
+  next:       0x612000000328
+  user:       0x612000000020
+  foot:       0x6120000000e8
+  foot->size: 200
+[  1] @ 0x6120000000f0
+  state:      a
+  size:       184 (total: 0xe0)
+  prev:       0x61200000065c
+  next:       0x610000000038
+  user:       0x612000000110
+  foot:       0x6120000001c8
+  foot->size: 184
+[  2] @ 0x6120000001d0
+  state:      u
+  size:       64 (total: 0x68)
+  prev:       0x612000000328
+  next:       0x612000000238
+  user:       0x6120000001f0
+  foot:       0x612000000230
+  foot->size: 64
+[  3] @ 0x612000000238
+  state:      u
+  size:       200 (total: 0xf0)
+  prev:       0x6120000001d0
+  next:       0x610000000098
+  user:       0x612000000258
+  foot:       0x612000000320
+  foot->size: 200
+[  4] @ 0x612000000328
+  state:      u
+  size:       100 (total: 0x8c)
+  prev:       0x612000000000
+  next:       0x6120000001d0
+  user:       0x612000000348
+  foot:       0x6120000003ac
+  foot->size: 100
+[  5] @ 0x6120000003b4
+  state:      u
+  size:       512 (total: 0x228)
+  prev:       0x6120000005dc
+  next:       0x612000000000
+  user:       0x6120000003d4
+  foot:       0x6120000005d4
+  foot->size: 512
+[  6] @ 0x6120000005dc
+  state:      u
+  size:       16 (total: 0x38)
+  prev:       0x612000000614
+  next:       0x6120000003b4
+  user:       0x6120000005fc
+  foot:       0x61200000060c
+  foot->size: 16
+[  7] @ 0x612000000614
+  state:      u
+  size:       32 (total: 0x48)
+  prev:       0x610000000078
+  next:       0x6120000005dc
+  user:       0x612000000634
+  foot:       0x612000000654
+  foot->size: 32
+[  8] @ 0x61200000065c
+  state:      a
+  size:       2428 (total: 0x9a4)
+  prev:       0x610000000018
+  next:       0x6120000000f0
+  user:       0x61200000067c
+  foot:       0x612000000ff8
+  foot->size: 2428
+
+POINTERS
+ptr[ 0]: (nil)
+ptr[ 1]: (nil)
+ptr[ 2]: (nil)
+ptr[ 3]: 0x612000000258
+ptr[ 4]: 0x6120000001f0
+ptr[ 5]: (nil)
+ptr[ 6]: (nil)
+ptr[ 7]: 0x612000000348
+ptr[ 8]: 0x612000000020
+ptr[ 9]: 0x6120000003d4
+ptr[10]: 0x6120000005fc
+ptr[11]: 0x612000000634

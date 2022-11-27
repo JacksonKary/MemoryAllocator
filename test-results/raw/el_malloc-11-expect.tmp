@@ -1,0 +1,80 @@
+{
+    // Tests if el_append_pages_to_heap(1) works correctly. The heap
+    // has 1 used block after malloc()'ing and no extra
+    // space. Expanding by 1 page gives a new available block and a
+    // larger heap size.
+    void *ptr = el_malloc(EL_PAGE_BYTES-EL_BLOCK_OVERHEAD);
+    printf("HEAP AFTER 1 MALLOC()\n");
+    el_print_stats(); printf("\n");
+
+    int ret = el_append_pages_to_heap(1);
+    printf("EXPANDED HEAP, ret: %d\n",ret);
+    el_print_stats(); printf("\n");
+
+    el_free(ptr);
+    printf("EXPANDED HEAP AFTER FREE\n");
+    el_print_stats(); printf("\n");
+}
+HEAP AFTER 1 MALLOC()
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   0  bytes:     0}
+USED LIST: {length:   1  bytes:  4096}
+  [  0] head @ 0x612000000000 {state: u  size:  4056}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       4056 (total: 0x1000)
+  prev:       0x610000000078
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x612000000ff8
+  foot->size: 4056
+
+EXPANDED HEAP, ret: 0
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000002000
+total_bytes: 8192
+AVAILABLE LIST: {length:   1  bytes:  4096}
+  [  0] head @ 0x612000001000 {state: a  size:  4056}
+USED LIST: {length:   1  bytes:  4096}
+  [  0] head @ 0x612000000000 {state: u  size:  4056}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       4056 (total: 0x1000)
+  prev:       0x610000000078
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x612000000ff8
+  foot->size: 4056
+[  1] @ 0x612000001000
+  state:      a
+  size:       4056 (total: 0x1000)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000001020
+  foot:       0x612000001ff8
+  foot->size: 4056
+
+EXPANDED HEAP AFTER FREE
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000002000
+total_bytes: 8192
+AVAILABLE LIST: {length:   1  bytes:  8192}
+  [  0] head @ 0x612000000000 {state: a  size:  8152}
+USED LIST: {length:   0  bytes:     0}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      a
+  size:       8152 (total: 0x2000)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000020
+  foot:       0x612000001ff8
+  foot->size: 8152
+

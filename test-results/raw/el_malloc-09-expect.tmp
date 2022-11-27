@@ -1,0 +1,89 @@
+{
+    // Checks that allocation of blocks close to the size available in
+    // the block does not split the block.
+    void *ptr[16] = {}; int len = 0;
+
+    ptr[len++] = el_malloc(2008); // split
+    ptr[len++] = el_malloc(2008); // NOT split
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+    printf("\nUSED BLOCKS 1\n"); el_print_stats(); printf("\n");
+
+    el_free(ptr[0]); ptr[0] = NULL;
+    ptr[len++] = el_malloc(1008); // split, 1000 left
+    ptr[len++] = el_malloc(980);  // NOT split
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+    printf("\nUSED BLOCKS 2\n"); el_print_stats(); printf("\n");
+}
+POINTERS
+ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x612000000820
+
+USED BLOCKS 1
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   0  bytes:     0}
+USED LIST: {length:   2  bytes:  4096}
+  [  0] head @ 0x612000000800 {state: u  size:  2008}
+  [  1] head @ 0x612000000000 {state: u  size:  2008}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       2008 (total: 0x800)
+  prev:       0x612000000800
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000007f8
+  foot->size: 2008
+[  1] @ 0x612000000800
+  state:      u
+  size:       2008 (total: 0x800)
+  prev:       0x610000000078
+  next:       0x612000000000
+  user:       0x612000000820
+  foot:       0x612000000ff8
+  foot->size: 2008
+
+POINTERS
+ptr[ 0]: (nil)
+ptr[ 1]: 0x612000000820
+ptr[ 2]: 0x612000000020
+ptr[ 3]: (nil)
+
+USED BLOCKS 2
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  1000}
+  [  0] head @ 0x612000000418 {state: a  size:   960}
+USED LIST: {length:   2  bytes:  3096}
+  [  0] head @ 0x612000000000 {state: u  size:  1008}
+  [  1] head @ 0x612000000800 {state: u  size:  2008}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       1008 (total: 0x418)
+  prev:       0x610000000078
+  next:       0x612000000800
+  user:       0x612000000020
+  foot:       0x612000000410
+  foot->size: 1008
+[  1] @ 0x612000000418
+  state:      a
+  size:       960 (total: 0x3e8)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000438
+  foot:       0x6120000007f8
+  foot->size: 960
+[  2] @ 0x612000000800
+  state:      u
+  size:       2008 (total: 0x800)
+  prev:       0x612000000000
+  next:       0x610000000098
+  user:       0x612000000820
+  foot:       0x612000000ff8
+  foot->size: 2008
+

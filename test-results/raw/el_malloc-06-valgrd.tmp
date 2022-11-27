@@ -1,0 +1,32 @@
+==2797662== Memcheck, a memory error detector
+==2797662== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2797662== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==2797662== Command: ./test_el_malloc Four\ Allocs\ Free\ Ver2
+==2797662== Parent PID: 2797661
+==2797662== 
+==2797662== Invalid read of size 8
+==2797662==    at 0x10A9C4: el_print_blocklist (el_malloc.c:159)
+==2797662==    by 0x10AB87: el_print_stats (el_malloc.c:220)
+==2797662==    by 0x109E5B: main (test_el_malloc.c:204)
+==2797662==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==2797662== 
+==2797662== 
+==2797662== Process terminating with default action of signal 11 (SIGSEGV)
+==2797662==  Access not within mapped region at address 0x0
+==2797662==    at 0x10A9C4: el_print_blocklist (el_malloc.c:159)
+==2797662==    by 0x10AB87: el_print_stats (el_malloc.c:220)
+==2797662==    by 0x109E5B: main (test_el_malloc.c:204)
+==2797662==  If you believe this happened as a result of a stack
+==2797662==  overflow in your program's main thread (unlikely but
+==2797662==  possible), you can try to increase the size of the
+==2797662==  main thread stack using the --main-stacksize= flag.
+==2797662==  The main thread stack size used in this run was 8388608.
+==2797662== 
+==2797662== HEAP SUMMARY:
+==2797662==     in use at exit: 0 bytes in 0 blocks
+==2797662==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==2797662== 
+==2797662== All heap blocks were freed -- no leaks are possible
+==2797662== 
+==2797662== For lists of detected and suppressed errors, rerun with: -s
+==2797662== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

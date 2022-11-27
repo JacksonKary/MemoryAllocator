@@ -1,0 +1,1835 @@
+* (TEST 5) Four Allocs Free Ver1
+COMMENTS:
+** program: ./test_el_malloc "Four Allocs Free Ver1"
+
+** --- Failure messages --- 
+- FAILURE(139) due to SIGSEGV (segmentation fault) from OS
+- FAILURE: Output Mismatch at lines marked
+
+** --- Side by Side Differences ---
+- Expect output in: test-results/raw/el_malloc-05-expect.tmp
+- Actual output in: test-results/raw/el_malloc-05-actual.tmp
+- Differing lines have a character like '|' '>' or '<' in the middle
+#+BEGIN_SRC sbs-diff
+==== EXPECT ====                                                   ==== ACTUAL ====                                                
+{                                                                  {
+    // Allocates 4 times the frees 4 times in the order that the       // Allocates 4 times the frees 4 times in the order that the
+    // allocation occured in. Looks for merging of blocks.             // allocation occured in. Looks for merging of blocks.
+
+    void *ptr[16] = {};                                                void *ptr[16] = {};
+    int len = 0;                                                       int len = 0;
+
+    ptr[len++] = el_malloc(128);                                       ptr[len++] = el_malloc(128);
+    printf("\nMALLOC 0\n"); el_print_stats(); printf("\n");            printf("\nMALLOC 0\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);                        printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(200);                                       ptr[len++] = el_malloc(200);
+    printf("\nMALLOC 1\n"); el_print_stats(); printf("\n");            printf("\nMALLOC 1\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);                        printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(64);                                        ptr[len++] = el_malloc(64);
+    printf("\nMALLOC 2\n"); el_print_stats(); printf("\n");            printf("\nMALLOC 2\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);                        printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    ptr[len++] = el_malloc(312);                                       ptr[len++] = el_malloc(312);
+    printf("\nMALLOC 3\n"); el_print_stats(); printf("\n");            printf("\nMALLOC 3\n"); el_print_stats(); printf("\n");
+    printf("POINTERS\n"); print_ptrs(ptr, len);                        printf("POINTERS\n"); print_ptrs(ptr, len);
+
+    el_free(ptr[0]);                                                   el_free(ptr[0]);
+    printf("\nFREE 0\n"); el_print_stats(); printf("\n");              printf("\nFREE 0\n"); el_print_stats(); printf("\n");
+
+    el_free(ptr[1]);                                                   el_free(ptr[1]);
+    printf("\nFREE 1\n"); el_print_stats(); printf("\n");              printf("\nFREE 1\n"); el_print_stats(); printf("\n");
+
+    el_free(ptr[2]);                                                   el_free(ptr[2]);
+    printf("\nFREE 2\n"); el_print_stats(); printf("\n");              printf("\nFREE 2\n"); el_print_stats(); printf("\n");
+
+    el_free(ptr[3]);                                                   el_free(ptr[3]);
+    printf("\nFREE 3\n"); el_print_stats(); printf("\n");              printf("\nFREE 3\n"); el_print_stats(); printf("\n");
+}                                                                  }
+
+MALLOC 0                                                           MALLOC 0
+HEAP STATS (overhead per node: 40)                                 HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                        heap_start:  0x612000000000
+heap_end:    0x612000001000                                        heap_end:    0x612000001000
+total_bytes: 4096                                                  total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3928}                        AVAILABLE LIST: {length:   1  bytes:  3928}
+  [  0] head @ 0x6120000000a8 {state: a  size:  3888}                [  0] head @ 0x6120000000a8 {state: a  size:  3888}
+USED LIST: {length:   1  bytes:   168}                             USED LIST: {length:   1  bytes:   168}
+  [  0] head @ 0x612000000000 {state: u  size:   128}                [  0] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:                                                       HEAP BLOCKS:
+[  0] @ 0x612000000000                                             [  0] @ 0x612000000000
+  state:      u                                                      state:      u
+  size:       128 (total: 0xa8)                                      size:       128 (total: 0xa8)
+  prev:       0x610000000078                                         prev:       0x610000000078
+  next:       0x610000000098                                         next:       0x610000000098
+  user:       0x612000000020                                         user:       0x612000000020
+  foot:       0x6120000000a0                                         foot:       0x6120000000a0
+  foot->size: 128                                                    foot->size: 128
+[  1] @ 0x6120000000a8                                             [  1] @ 0x6120000000a8
+  state:      a                                                      state:      a
+  size:       3888 (total: 0xf58)                                    size:       3888 (total: 0xf58)
+  prev:       0x610000000018                                         prev:       0x610000000018
+  next:       0x610000000038                                         next:       0x610000000038
+  user:       0x6120000000c8                                         user:       0x6120000000c8
+  foot:       0x612000000ff8                                         foot:       0x612000000ff8
+  foot->size: 3888                                                   foot->size: 3888
+
+POINTERS                                                           POINTERS
+ptr[ 0]: 0x612000000020                                            ptr[ 0]: 0x612000000020
+
+MALLOC 1                                                           MALLOC 1
+HEAP STATS (overhead per node: 40)                                 HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                        heap_start:  0x612000000000
+heap_end:    0x612000001000                                        heap_end:    0x612000001000
+total_bytes: 4096                                                  total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3688}                        AVAILABLE LIST: {length:   1  bytes:  3688}
+  [  0] head @ 0x612000000198 {state: a  size:  3648}                [  0] head @ 0x612000000198 {state: a  size:  3648}
+USED LIST: {length:   2  bytes:   408}                             USED LIST: {length:   2  bytes:   408}
+  [  0] head @ 0x6120000000a8 {state: u  size:   200}                [  0] head @ 0x6120000000a8 {state: u  size:   200}
+  [  1] head @ 0x612000000000 {state: u  size:   128}                [  1] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:                                                       HEAP BLOCKS:
+[  0] @ 0x612000000000                                             [  0] @ 0x612000000000
+  state:      u                                                      state:      u
+  size:       128 (total: 0xa8)                                      size:       128 (total: 0xa8)
+  prev:       0x6120000000a8                                         prev:       0x6120000000a8
+  next:       0x610000000098                                         next:       0x610000000098
+  user:       0x612000000020                                         user:       0x612000000020
+  foot:       0x6120000000a0                                         foot:       0x6120000000a0
+  foot->size: 128                                                    foot->size: 128
+[  1] @ 0x6120000000a8                                             [  1] @ 0x6120000000a8
+  state:      u                                                      state:      u
+  size:       200 (total: 0xf0)                                      size:       200 (total: 0xf0)
+  prev:       0x610000000078                                         prev:       0x610000000078
+  next:       0x612000000000                                         next:       0x612000000000
+  user:       0x6120000000c8                                         user:       0x6120000000c8
+  foot:       0x612000000190                                         foot:       0x612000000190
+  foot->size: 200                                                    foot->size: 200
+[  2] @ 0x612000000198                                             [  2] @ 0x612000000198
+  state:      a                                                      state:      a
+  size:       3648 (total: 0xe68)                                    size:       3648 (total: 0xe68)
+  prev:       0x610000000018                                         prev:       0x610000000018
+  next:       0x610000000038                                         next:       0x610000000038
+  user:       0x6120000001b8                                         user:       0x6120000001b8
+  foot:       0x612000000ff8                                         foot:       0x612000000ff8
+  foot->size: 3648                                                   foot->size: 3648
+
+POINTERS                                                           POINTERS
+ptr[ 0]: 0x612000000020                                            ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x6120000000c8                                            ptr[ 1]: 0x6120000000c8
+
+MALLOC 2                                                           MALLOC 2
+HEAP STATS (overhead per node: 40)                                 HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                        heap_start:  0x612000000000
+heap_end:    0x612000001000                                        heap_end:    0x612000001000
+total_bytes: 4096                                                  total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3584}                        AVAILABLE LIST: {length:   1  bytes:  3584}
+  [  0] head @ 0x612000000200 {state: a  size:  3544}                [  0] head @ 0x612000000200 {state: a  size:  3544}
+USED LIST: {length:   3  bytes:   512}                             USED LIST: {length:   3  bytes:   512}
+  [  0] head @ 0x612000000198 {state: u  size:    64}                [  0] head @ 0x612000000198 {state: u  size:    64}
+  [  1] head @ 0x6120000000a8 {state: u  size:   200}                [  1] head @ 0x6120000000a8 {state: u  size:   200}
+  [  2] head @ 0x612000000000 {state: u  size:   128}                [  2] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:                                                       HEAP BLOCKS:
+[  0] @ 0x612000000000                                             [  0] @ 0x612000000000
+  state:      u                                                      state:      u
+  size:       128 (total: 0xa8)                                      size:       128 (total: 0xa8)
+  prev:       0x6120000000a8                                         prev:       0x6120000000a8
+  next:       0x610000000098                                         next:       0x610000000098
+  user:       0x612000000020                                         user:       0x612000000020
+  foot:       0x6120000000a0                                         foot:       0x6120000000a0
+  foot->size: 128                                                    foot->size: 128
+[  1] @ 0x6120000000a8                                             [  1] @ 0x6120000000a8
+  state:      u                                                      state:      u
+  size:       200 (total: 0xf0)                                      size:       200 (total: 0xf0)
+  prev:       0x612000000198                                         prev:       0x612000000198
+  next:       0x612000000000                                         next:       0x612000000000
+  user:       0x6120000000c8                                         user:       0x6120000000c8
+  foot:       0x612000000190                                         foot:       0x612000000190
+  foot->size: 200                                                    foot->size: 200
+[  2] @ 0x612000000198                                             [  2] @ 0x612000000198
+  state:      u                                                      state:      u
+  size:       64 (total: 0x68)                                       size:       64 (total: 0x68)
+  prev:       0x610000000078                                         prev:       0x610000000078
+  next:       0x6120000000a8                                         next:       0x6120000000a8
+  user:       0x6120000001b8                                         user:       0x6120000001b8
+  foot:       0x6120000001f8                                         foot:       0x6120000001f8
+  foot->size: 64                                                     foot->size: 64
+[  3] @ 0x612000000200                                             [  3] @ 0x612000000200
+  state:      a                                                      state:      a
+  size:       3544 (total: 0xe00)                                    size:       3544 (total: 0xe00)
+  prev:       0x610000000018                                         prev:       0x610000000018
+  next:       0x610000000038                                         next:       0x610000000038
+  user:       0x612000000220                                         user:       0x612000000220
+  foot:       0x612000000ff8                                         foot:       0x612000000ff8
+  foot->size: 3544                                                   foot->size: 3544
+
+POINTERS                                                           POINTERS
+ptr[ 0]: 0x612000000020                                            ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x6120000000c8                                            ptr[ 1]: 0x6120000000c8
+ptr[ 2]: 0x6120000001b8                                            ptr[ 2]: 0x6120000001b8
+
+MALLOC 3                                                           MALLOC 3
+HEAP STATS (overhead per node: 40)                                 HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                        heap_start:  0x612000000000
+heap_end:    0x612000001000                                        heap_end:    0x612000001000
+total_bytes: 4096                                                  total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3232}                        AVAILABLE LIST: {length:   1  bytes:  3232}
+  [  0] head @ 0x612000000360 {state: a  size:  3192}                [  0] head @ 0x612000000360 {state: a  size:  3192}
+USED LIST: {length:   4  bytes:   864}                             USED LIST: {length:   4  bytes:   864}
+  [  0] head @ 0x612000000200 {state: u  size:   312}                [  0] head @ 0x612000000200 {state: u  size:   312}
+  [  1] head @ 0x612000000198 {state: u  size:    64}                [  1] head @ 0x612000000198 {state: u  size:    64}
+  [  2] head @ 0x6120000000a8 {state: u  size:   200}                [  2] head @ 0x6120000000a8 {state: u  size:   200}
+  [  3] head @ 0x612000000000 {state: u  size:   128}                [  3] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:                                                       HEAP BLOCKS:
+[  0] @ 0x612000000000                                             [  0] @ 0x612000000000
+  state:      u                                                      state:      u
+  size:       128 (total: 0xa8)                                      size:       128 (total: 0xa8)
+  prev:       0x6120000000a8                                         prev:       0x6120000000a8
+  next:       0x610000000098                                         next:       0x610000000098
+  user:       0x612000000020                                         user:       0x612000000020
+  foot:       0x6120000000a0                                         foot:       0x6120000000a0
+  foot->size: 128                                                    foot->size: 128
+[  1] @ 0x6120000000a8                                             [  1] @ 0x6120000000a8
+  state:      u                                                      state:      u
+  size:       200 (total: 0xf0)                                      size:       200 (total: 0xf0)
+  prev:       0x612000000198                                         prev:       0x612000000198
+  next:       0x612000000000                                         next:       0x612000000000
+  user:       0x6120000000c8                                         user:       0x6120000000c8
+  foot:       0x612000000190                                         foot:       0x612000000190
+  foot->size: 200                                                    foot->size: 200
+[  2] @ 0x612000000198                                             [  2] @ 0x612000000198
+  state:      u                                                      state:      u
+  size:       64 (total: 0x68)                                       size:       64 (total: 0x68)
+  prev:       0x612000000200                                         prev:       0x612000000200
+  next:       0x6120000000a8                                         next:       0x6120000000a8
+  user:       0x6120000001b8                                         user:       0x6120000001b8
+  foot:       0x6120000001f8                                         foot:       0x6120000001f8
+  foot->size: 64                                                     foot->size: 64
+[  3] @ 0x612000000200                                             [  3] @ 0x612000000200
+  state:      u                                                      state:      u
+  size:       312 (total: 0x160)                                     size:       312 (total: 0x160)
+  prev:       0x610000000078                                         prev:       0x610000000078
+  next:       0x612000000198                                         next:       0x612000000198
+  user:       0x612000000220                                         user:       0x612000000220
+  foot:       0x612000000358                                         foot:       0x612000000358
+  foot->size: 312                                                    foot->size: 312
+[  4] @ 0x612000000360                                             [  4] @ 0x612000000360
+  state:      a                                                      state:      a
+  size:       3192 (total: 0xca0)                                    size:       3192 (total: 0xca0)
+  prev:       0x610000000018                                         prev:       0x610000000018
+  next:       0x610000000038                                         next:       0x610000000038
+  user:       0x612000000380                                         user:       0x612000000380
+  foot:       0x612000000ff8                                         foot:       0x612000000ff8
+  foot->size: 3192                                                   foot->size: 3192
+
+POINTERS                                                           POINTERS
+ptr[ 0]: 0x612000000020                                            ptr[ 0]: 0x612000000020
+ptr[ 1]: 0x6120000000c8                                            ptr[ 1]: 0x6120000000c8
+ptr[ 2]: 0x6120000001b8                                            ptr[ 2]: 0x6120000001b8
+ptr[ 3]: 0x612000000220                                            ptr[ 3]: 0x612000000220
+
+FREE 0                                                             FREE 0
+HEAP STATS (overhead per node: 40)                                 HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                        heap_start:  0x612000000000
+heap_end:    0x612000001000                                        heap_end:    0x612000001000
+total_bytes: 4096                                                  total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  3400}                        AVAILABLE LIST: {length:   2  bytes:  3400}
+  [  0] head @ 0x612000000000 {state: a  size:   128}                [  0] head @ 0x612000000000 {state: a  size:   128}
+  [  1] head @ 0x612000000360 {state: a  size:  3192}                [  1] head @ 0x612000000360 {state: a  size:  3192}
+USED LIST: {length:   3  bytes:   696}                             USED LIST: {length:   3  bytes:   696}
+  [  0] head @ 0x612000000200 {state: u  size:   312}                [  0] head @ 0x612000000200 {state: u  size:   312}
+  [  1] head @ 0x612000000198 {state: u  size:    64}                [  1] head @ 0x612000000198 {state: u  size:    64}
+  [  2] head @ 0x6120000000a8 {state: u  size:   200}                [  2] head @ 0x6120000000a8 {state: u  size:   200}
+HEAP BLOCKS:                                                       HEAP BLOCKS:
+[  0] @ 0x612000000000                                             [  0] @ 0x612000000000
+  state:      a                                                      state:      a
+  size:       128 (total: 0xa8)                                      size:       128 (total: 0xa8)
+  prev:       0x610000000018                                         prev:       0x610000000018
+  next:       0x612000000360                                         next:       0x612000000360
+  user:       0x612000000020                                         user:       0x612000000020
+  foot:       0x6120000000a0                                         foot:       0x6120000000a0
+  foot->size: 128                                                    foot->size: 128
+[  1] @ 0x6120000000a8                                             [  1] @ 0x6120000000a8
+  state:      u                                                      state:      u
+  size:       200 (total: 0xf0)                                      size:       200 (total: 0xf0)
+  prev:       0x612000000198                                         prev:       0x612000000198
+  next:       0x610000000098                                         next:       0x610000000098
+  user:       0x6120000000c8                                         user:       0x6120000000c8
+  foot:       0x612000000190                                         foot:       0x612000000190
+  foot->size: 200                                                    foot->size: 200
+[  2] @ 0x612000000198                                             [  2] @ 0x612000000198
+  state:      u                                                      state:      u
+  size:       64 (total: 0x68)                                       size:       64 (total: 0x68)
+  prev:       0x612000000200                                         prev:       0x612000000200
+  next:       0x6120000000a8                                         next:       0x6120000000a8
+  user:       0x6120000001b8                                         user:       0x6120000001b8
+  foot:       0x6120000001f8                                         foot:       0x6120000001f8
+  foot->size: 64                                                     foot->size: 64
+[  3] @ 0x612000000200                                             [  3] @ 0x612000000200
+  state:      u                                                      state:      u
+  size:       312 (total: 0x160)                                     size:       312 (total: 0x160)
+  prev:       0x610000000078                                         prev:       0x610000000078
+  next:       0x612000000198                                         next:       0x612000000198
+  user:       0x612000000220                                         user:       0x612000000220
+  foot:       0x612000000358                                         foot:       0x612000000358
+  foot->size: 312                                                    foot->size: 312
+[  4] @ 0x612000000360                                             [  4] @ 0x612000000360
+  state:      a                                                      state:      a
+  size:       3192 (total: 0xca0)                                    size:       3192 (total: 0xca0)
+  prev:       0x612000000000                                         prev:       0x612000000000
+  next:       0x610000000038                                         next:       0x610000000038
+  user:       0x612000000380                                         user:       0x612000000380
+  foot:       0x612000000ff8                                         foot:       0x612000000ff8
+  foot->size: 3192                                                   foot->size: 3192
+
+
+FREE 1                                                             FREE 1
+HEAP STATS (overhead per node: 40)                                 HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                        heap_start:  0x612000000000
+heap_end:    0x612000001000                                        heap_end:    0x612000001000
+total_bytes: 4096                                                  total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  3640}                      | AVAILABLE LIST: {length:   3  bytes:  3640}
+  [  0] head @ 0x612000000000 {state: a  size:   368}            |   [  0] head @ 0x6120000000a8 {state: a  size:   200}
+  [  1] head @ 0x612000000360 {state: a  size:  3192}            |   [  1] head @ 0x612000000000 {state: a  size:   128}
+                                                                 >   [  2] head @ 0x612000000360 {state: a  size:  3192}
+USED LIST: {length:   2  bytes:   456}                             USED LIST: {length:   2  bytes:   456}
+  [  0] head @ 0x612000000200 {state: u  size:   312}                [  0] head @ 0x612000000200 {state: u  size:   312}
+  [  1] head @ 0x612000000198 {state: u  size:    64}                [  1] head @ 0x612000000198 {state: u  size:    64}
+HEAP BLOCKS:                                                       HEAP BLOCKS:
+[  0] @ 0x612000000000                                             [  0] @ 0x612000000000
+  state:      a                                                      state:      a
+  size:       368 (total: 0x198)                                 |   size:       128 (total: 0xa8)
+  prev:       0x610000000018                                     |   prev:       0x6120000000a8
+  next:       0x612000000360                                         next:       0x612000000360
+  user:       0x612000000020                                         user:       0x612000000020
+                                                                 >   foot:       0x6120000000a0
+                                                                 >   foot->size: 128
+                                                                 > [  1] @ 0x6120000000a8
+                                                                 >   state:      a
+                                                                 >   size:       200 (total: 0xf0)
+                                                                 >   prev:       0x610000000018
+                                                                 >   next:       0x612000000000
+                                                                 >   user:       0x6120000000c8
+  foot:       0x612000000190                                         foot:       0x612000000190
+  foot->size: 368                                                |   foot->size: 200
+[  1] @ 0x612000000198                                           | [  2] @ 0x612000000198
+  state:      u                                                      state:      u
+  size:       64 (total: 0x68)                                       size:       64 (total: 0x68)
+  prev:       0x612000000200                                         prev:       0x612000000200
+  next:       0x610000000098                                         next:       0x610000000098
+  user:       0x6120000001b8                                         user:       0x6120000001b8
+  foot:       0x6120000001f8                                         foot:       0x6120000001f8
+  foot->size: 64                                                     foot->size: 64
+[  2] @ 0x612000000200                                           | [  3] @ 0x612000000200
+  state:      u                                                      state:      u
+  size:       312 (total: 0x160)                                     size:       312 (total: 0x160)
+  prev:       0x610000000078                                         prev:       0x610000000078
+  next:       0x612000000198                                         next:       0x612000000198
+  user:       0x612000000220                                         user:       0x612000000220
+  foot:       0x612000000358                                         foot:       0x612000000358
+  foot->size: 312                                                    foot->size: 312
+[  3] @ 0x612000000360                                           | [  4] @ 0x612000000360
+  state:      a                                                      state:      a
+  size:       3192 (total: 0xca0)                                    size:       3192 (total: 0xca0)
+  prev:       0x612000000000                                         prev:       0x612000000000
+  next:       0x610000000038                                         next:       0x610000000038
+  user:       0x612000000380                                         user:       0x612000000380
+  foot:       0x612000000ff8                                         foot:       0x612000000ff8
+  foot->size: 3192                                                   foot->size: 3192
+
+
+FREE 2                                                             FREE 2
+HEAP STATS (overhead per node: 40)                                 HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000                                        heap_start:  0x612000000000
+heap_end:    0x612000001000                                        heap_end:    0x612000001000
+total_bytes: 4096                                                  total_bytes: 4096
+AVAILABLE LIST: {length:   2  bytes:  3744}                      | AVAILABLE LIST: {length:   4  bytes:  3880}
+  [  0] head @ 0x612000000000 {state: a  size:   472}            |   [  0] head @ 0x6120000000a8 {state: a  size:   200}
+  [  1] head @ 0x612000000360 {state: a  size:  3192}            |   [  1] head @ 0x612000000000 {state: a  size:   128}
+USED LIST: {length:   1  bytes:   352}                           |   [  2] head @ 0x612000000360 {state: a  size:  3192}
+  [  0] head @ 0x612000000200 {state: u  size:   312}            |   [  3] head @ 0x610000000038 {state: E  size:     0}
+                                                                 > USED LIST: {length:   0  bytes:   112}
+HEAP BLOCKS:                                                       HEAP BLOCKS:
+[  0] @ 0x612000000000                                             [  0] @ 0x612000000000
+  state:      a                                                      state:      a
+  size:       472 (total: 0x200)                                 |   size:       128 (total: 0xa8)
+  prev:       0x610000000018                                     |   prev:       0x6120000000a8
+  next:       0x612000000360                                         next:       0x612000000360
+  user:       0x612000000020                                         user:       0x612000000020
+  foot:       0x6120000001f8                                     |   foot:       0x6120000000a0
+  foot->size: 472                                                |   foot->size: 128
+[  1] @ 0x612000000200                                           | [  1] @ 0x6120000000a8
+  state:      u                                                  <
+  size:       312 (total: 0x160)                                 <
+  prev:       0x610000000078                                     <
+  next:       0x610000000098                                     <
+  user:       0x612000000220                                     <
+  foot:       0x612000000358                                     <
+  foot->size: 312                                                <
+[  2] @ 0x612000000360                                           <
+  state:      a                                                  <
+  size:       3192 (total: 0xca0)                                <
+  prev:       0x612000000000                                     <
+  next:       0x610000000038                                     <
+  user:       0x612000000380                                     <
+  foot:       0x612000000ff8                                     <
+  foot->size: 3192                                               <
+                                                                 <
+                                                                 <
+FREE 3                                                           <
+HEAP STATS (overhead per node: 40)                               <
+heap_start:  0x612000000000                                      <
+heap_end:    0x612000001000                                      <
+total_bytes: 4096                                                <
+AVAILABLE LIST: {length:   1  bytes:  4096}                      <
+  [  0] head @ 0x612000000000 {state: a  size:  4056}            <
+USED LIST: {length:   0  bytes:     0}                           <
+HEAP BLOCKS:                                                     <
+[  0] @ 0x612000000000                                           <
+  state:      a                                                      state:      a
+  size:       4056 (total: 0x1000)                               |   size:       200 (total: 0xf0)
+  prev:       0x610000000018                                         prev:       0x610000000018
+  next:       0x610000000038                                     |   next:       0x612000000000
+  user:       0x612000000020                                     |   user:       0x6120000000c8
+  foot:       0x612000000ff8                                     |   foot:       0x612000000190
+  foot->size: 4056                                               |   foot->size: 200
+                                                                 | [  2] @ 0x612000000198
+                                                                 >   state:      a
+                                                                 >   size:       304 (total: 0x158)
+                                                                 >   prev:       0x612000000200
+                                                                 >   next:       0x610000000098
+                                                                 >   user:       0x6120000001b8
+                                                                 >   foot:       0x6120000002e8
+                                                                 >   foot->size: 0
+                                                                 > [  3] @ 0x6120000002f0
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000310
+                                                                 >   foot:       0x612000000310
+                                                                 >   foot->size: 0
+                                                                 > [  4] @ 0x612000000318
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000338
+                                                                 >   foot:       0x612000000338
+                                                                 >   foot->size: 0
+                                                                 > [  5] @ 0x612000000340
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       0x138
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000360
+                                                                 >   foot:       0x612000000360
+                                                                 >   foot->size: 3192
+                                                                 > [  6] @ 0x612000000368
+                                                                 >   state:      8
+                                                                 >   size:       97 (total: 0x89)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       0x612000000000
+                                                                 >   user:       0x612000000388
+                                                                 >   foot:       0x6120000003e9
+                                                                 >   foot->size: 0
+                                                                 > [  7] @ 0x6120000003f1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000411
+                                                                 >   foot:       0x612000000411
+                                                                 >   foot->size: 0
+                                                                 > [  8] @ 0x612000000419
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000439
+                                                                 >   foot:       0x612000000439
+                                                                 >   foot->size: 0
+                                                                 > [  9] @ 0x612000000441
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000461
+                                                                 >   foot:       0x612000000461
+                                                                 >   foot->size: 0
+                                                                 > [ 10] @ 0x612000000469
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000489
+                                                                 >   foot:       0x612000000489
+                                                                 >   foot->size: 0
+                                                                 > [ 11] @ 0x612000000491
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000004b1
+                                                                 >   foot:       0x6120000004b1
+                                                                 >   foot->size: 0
+                                                                 > [ 12] @ 0x6120000004b9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000004d9
+                                                                 >   foot:       0x6120000004d9
+                                                                 >   foot->size: 0
+                                                                 > [ 13] @ 0x6120000004e1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000501
+                                                                 >   foot:       0x612000000501
+                                                                 >   foot->size: 0
+                                                                 > [ 14] @ 0x612000000509
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000529
+                                                                 >   foot:       0x612000000529
+                                                                 >   foot->size: 0
+                                                                 > [ 15] @ 0x612000000531
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000551
+                                                                 >   foot:       0x612000000551
+                                                                 >   foot->size: 0
+                                                                 > [ 16] @ 0x612000000559
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000579
+                                                                 >   foot:       0x612000000579
+                                                                 >   foot->size: 0
+                                                                 > [ 17] @ 0x612000000581
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000005a1
+                                                                 >   foot:       0x6120000005a1
+                                                                 >   foot->size: 0
+                                                                 > [ 18] @ 0x6120000005a9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000005c9
+                                                                 >   foot:       0x6120000005c9
+                                                                 >   foot->size: 0
+                                                                 > [ 19] @ 0x6120000005d1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000005f1
+                                                                 >   foot:       0x6120000005f1
+                                                                 >   foot->size: 0
+                                                                 > [ 20] @ 0x6120000005f9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000619
+                                                                 >   foot:       0x612000000619
+                                                                 >   foot->size: 0
+                                                                 > [ 21] @ 0x612000000621
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000641
+                                                                 >   foot:       0x612000000641
+                                                                 >   foot->size: 0
+                                                                 > [ 22] @ 0x612000000649
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000669
+                                                                 >   foot:       0x612000000669
+                                                                 >   foot->size: 0
+                                                                 > [ 23] @ 0x612000000671
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000691
+                                                                 >   foot:       0x612000000691
+                                                                 >   foot->size: 0
+                                                                 > [ 24] @ 0x612000000699
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000006b9
+                                                                 >   foot:       0x6120000006b9
+                                                                 >   foot->size: 0
+                                                                 > [ 25] @ 0x6120000006c1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000006e1
+                                                                 >   foot:       0x6120000006e1
+                                                                 >   foot->size: 0
+                                                                 > [ 26] @ 0x6120000006e9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000709
+                                                                 >   foot:       0x612000000709
+                                                                 >   foot->size: 0
+                                                                 > [ 27] @ 0x612000000711
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000731
+                                                                 >   foot:       0x612000000731
+                                                                 >   foot->size: 0
+                                                                 > [ 28] @ 0x612000000739
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000759
+                                                                 >   foot:       0x612000000759
+                                                                 >   foot->size: 0
+                                                                 > [ 29] @ 0x612000000761
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000781
+                                                                 >   foot:       0x612000000781
+                                                                 >   foot->size: 0
+                                                                 > [ 30] @ 0x612000000789
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000007a9
+                                                                 >   foot:       0x6120000007a9
+                                                                 >   foot->size: 0
+                                                                 > [ 31] @ 0x6120000007b1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000007d1
+                                                                 >   foot:       0x6120000007d1
+                                                                 >   foot->size: 0
+                                                                 > [ 32] @ 0x6120000007d9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000007f9
+                                                                 >   foot:       0x6120000007f9
+                                                                 >   foot->size: 0
+                                                                 > [ 33] @ 0x612000000801
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000821
+                                                                 >   foot:       0x612000000821
+                                                                 >   foot->size: 0
+                                                                 > [ 34] @ 0x612000000829
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000849
+                                                                 >   foot:       0x612000000849
+                                                                 >   foot->size: 0
+                                                                 > [ 35] @ 0x612000000851
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000871
+                                                                 >   foot:       0x612000000871
+                                                                 >   foot->size: 0
+                                                                 > [ 36] @ 0x612000000879
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000899
+                                                                 >   foot:       0x612000000899
+                                                                 >   foot->size: 0
+                                                                 > [ 37] @ 0x6120000008a1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000008c1
+                                                                 >   foot:       0x6120000008c1
+                                                                 >   foot->size: 0
+                                                                 > [ 38] @ 0x6120000008c9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000008e9
+                                                                 >   foot:       0x6120000008e9
+                                                                 >   foot->size: 0
+                                                                 > [ 39] @ 0x6120000008f1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000911
+                                                                 >   foot:       0x612000000911
+                                                                 >   foot->size: 0
+                                                                 > [ 40] @ 0x612000000919
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000939
+                                                                 >   foot:       0x612000000939
+                                                                 >   foot->size: 0
+                                                                 > [ 41] @ 0x612000000941
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000961
+                                                                 >   foot:       0x612000000961
+                                                                 >   foot->size: 0
+                                                                 > [ 42] @ 0x612000000969
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000989
+                                                                 >   foot:       0x612000000989
+                                                                 >   foot->size: 0
+                                                                 > [ 43] @ 0x612000000991
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000009b1
+                                                                 >   foot:       0x6120000009b1
+                                                                 >   foot->size: 0
+                                                                 > [ 44] @ 0x6120000009b9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x6120000009d9
+                                                                 >   foot:       0x6120000009d9
+                                                                 >   foot->size: 0
+                                                                 > [ 45] @ 0x6120000009e1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000a01
+                                                                 >   foot:       0x612000000a01
+                                                                 >   foot->size: 0
+                                                                 > [ 46] @ 0x612000000a09
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000a29
+                                                                 >   foot:       0x612000000a29
+                                                                 >   foot->size: 0
+                                                                 > [ 47] @ 0x612000000a31
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000a51
+                                                                 >   foot:       0x612000000a51
+                                                                 >   foot->size: 0
+                                                                 > [ 48] @ 0x612000000a59
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000a79
+                                                                 >   foot:       0x612000000a79
+                                                                 >   foot->size: 0
+                                                                 > [ 49] @ 0x612000000a81
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000aa1
+                                                                 >   foot:       0x612000000aa1
+                                                                 >   foot->size: 0
+                                                                 > [ 50] @ 0x612000000aa9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000ac9
+                                                                 >   foot:       0x612000000ac9
+                                                                 >   foot->size: 0
+                                                                 > [ 51] @ 0x612000000ad1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000af1
+                                                                 >   foot:       0x612000000af1
+                                                                 >   foot->size: 0
+                                                                 > [ 52] @ 0x612000000af9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000b19
+                                                                 >   foot:       0x612000000b19
+                                                                 >   foot->size: 0
+                                                                 > [ 53] @ 0x612000000b21
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000b41
+                                                                 >   foot:       0x612000000b41
+                                                                 >   foot->size: 0
+                                                                 > [ 54] @ 0x612000000b49
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000b69
+                                                                 >   foot:       0x612000000b69
+                                                                 >   foot->size: 0
+                                                                 > [ 55] @ 0x612000000b71
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000b91
+                                                                 >   foot:       0x612000000b91
+                                                                 >   foot->size: 0
+                                                                 > [ 56] @ 0x612000000b99
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000bb9
+                                                                 >   foot:       0x612000000bb9
+                                                                 >   foot->size: 0
+                                                                 > [ 57] @ 0x612000000bc1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000be1
+                                                                 >   foot:       0x612000000be1
+                                                                 >   foot->size: 0
+                                                                 > [ 58] @ 0x612000000be9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000c09
+                                                                 >   foot:       0x612000000c09
+                                                                 >   foot->size: 0
+                                                                 > [ 59] @ 0x612000000c11
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000c31
+                                                                 >   foot:       0x612000000c31
+                                                                 >   foot->size: 0
+                                                                 > [ 60] @ 0x612000000c39
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000c59
+                                                                 >   foot:       0x612000000c59
+                                                                 >   foot->size: 0
+                                                                 > [ 61] @ 0x612000000c61
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000c81
+                                                                 >   foot:       0x612000000c81
+                                                                 >   foot->size: 0
+                                                                 > [ 62] @ 0x612000000c89
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000ca9
+                                                                 >   foot:       0x612000000ca9
+                                                                 >   foot->size: 0
+                                                                 > [ 63] @ 0x612000000cb1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000cd1
+                                                                 >   foot:       0x612000000cd1
+                                                                 >   foot->size: 0
+                                                                 > [ 64] @ 0x612000000cd9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000cf9
+                                                                 >   foot:       0x612000000cf9
+                                                                 >   foot->size: 0
+                                                                 > [ 65] @ 0x612000000d01
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000d21
+                                                                 >   foot:       0x612000000d21
+                                                                 >   foot->size: 0
+                                                                 > [ 66] @ 0x612000000d29
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000d49
+                                                                 >   foot:       0x612000000d49
+                                                                 >   foot->size: 0
+                                                                 > [ 67] @ 0x612000000d51
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000d71
+                                                                 >   foot:       0x612000000d71
+                                                                 >   foot->size: 0
+                                                                 > [ 68] @ 0x612000000d79
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000d99
+                                                                 >   foot:       0x612000000d99
+                                                                 >   foot->size: 0
+                                                                 > [ 69] @ 0x612000000da1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000dc1
+                                                                 >   foot:       0x612000000dc1
+                                                                 >   foot->size: 0
+                                                                 > [ 70] @ 0x612000000dc9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000de9
+                                                                 >   foot:       0x612000000de9
+                                                                 >   foot->size: 0
+                                                                 > [ 71] @ 0x612000000df1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000e11
+                                                                 >   foot:       0x612000000e11
+                                                                 >   foot->size: 0
+                                                                 > [ 72] @ 0x612000000e19
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000e39
+                                                                 >   foot:       0x612000000e39
+                                                                 >   foot->size: 0
+                                                                 > [ 73] @ 0x612000000e41
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000e61
+                                                                 >   foot:       0x612000000e61
+                                                                 >   foot->size: 0
+                                                                 > [ 74] @ 0x612000000e69
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000e89
+                                                                 >   foot:       0x612000000e89
+                                                                 >   foot->size: 0
+                                                                 > [ 75] @ 0x612000000e91
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000eb1
+                                                                 >   foot:       0x612000000eb1
+                                                                 >   foot->size: 0
+                                                                 > [ 76] @ 0x612000000eb9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000ed9
+                                                                 >   foot:       0x612000000ed9
+                                                                 >   foot->size: 0
+                                                                 > [ 77] @ 0x612000000ee1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000f01
+                                                                 >   foot:       0x612000000f01
+                                                                 >   foot->size: 0
+                                                                 > [ 78] @ 0x612000000f09
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000f29
+                                                                 >   foot:       0x612000000f29
+                                                                 >   foot->size: 0
+                                                                 > [ 79] @ 0x612000000f31
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000f51
+                                                                 >   foot:       0x612000000f51
+                                                                 >   foot->size: 0
+                                                                 > [ 80] @ 0x612000000f59
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000f79
+                                                                 >   foot:       0x612000000f79
+                                                                 >   foot->size: 0
+                                                                 > [ 81] @ 0x612000000f81
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000fa1
+                                                                 >   foot:       0x612000000fa1
+                                                                 >   foot->size: 0
+                                                                 > [ 82] @ 0x612000000fa9
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000fc9
+                                                                 >   foot:       0x612000000fc9
+                                                                 >   foot->size: 0
+                                                                 > [ 83] @ 0x612000000fd1
+                                                                 >   state:      
+                                                                 >   size:       0 (total: 0x28)
+                                                                 >   prev:       (nil)
+                                                                 >   next:       (nil)
+                                                                 >   user:       0x612000000ff1
+                                                                 >   foot:       0x612000000ff1
+                                                                 >   foot->size: 8646911284551352320
+                                                                 > [ 84] @ 
+#+END_SRC
+
+** --- Line Differences ---
+EXPECT: 277) AVAILABLE LIST: {length:   2  bytes:  3640}
+EXPECT: 278)   [  0] head @ 0x612000000000 {state: a  size:   368}
+EXPECT: 279)   [  1] head @ 0x612000000360 {state: a  size:  3192}
+ACTUAL: 277) AVAILABLE LIST: {length:   3  bytes:  3640}
+ACTUAL: 278)   [  0] head @ 0x6120000000a8 {state: a  size:   200}
+ACTUAL: 279)   [  1] head @ 0x612000000000 {state: a  size:   128}
+ACTUAL: 280)   [  2] head @ 0x612000000360 {state: a  size:  3192}
+EXPECT: 286)   size:       368 (total: 0x198)
+EXPECT: 287)   prev:       0x610000000018
+ACTUAL: 287)   size:       128 (total: 0xa8)
+ACTUAL: 288)   prev:       0x6120000000a8
+ACTUAL: 291)   foot:       0x6120000000a0
+ACTUAL: 292)   foot->size: 128
+ACTUAL: 293) [  1] @ 0x6120000000a8
+ACTUAL: 294)   state:      a
+ACTUAL: 295)   size:       200 (total: 0xf0)
+ACTUAL: 296)   prev:       0x610000000018
+ACTUAL: 297)   next:       0x612000000000
+ACTUAL: 298)   user:       0x6120000000c8
+EXPECT: 291)   foot->size: 368
+EXPECT: 292) [  1] @ 0x612000000198
+ACTUAL: 300)   foot->size: 200
+ACTUAL: 301) [  2] @ 0x612000000198
+EXPECT: 300) [  2] @ 0x612000000200
+ACTUAL: 309) [  3] @ 0x612000000200
+EXPECT: 308) [  3] @ 0x612000000360
+ACTUAL: 317) [  4] @ 0x612000000360
+EXPECT: 323) AVAILABLE LIST: {length:   2  bytes:  3744}
+EXPECT: 324)   [  0] head @ 0x612000000000 {state: a  size:   472}
+EXPECT: 325)   [  1] head @ 0x612000000360 {state: a  size:  3192}
+EXPECT: 326) USED LIST: {length:   1  bytes:   352}
+EXPECT: 327)   [  0] head @ 0x612000000200 {state: u  size:   312}
+ACTUAL: 332) AVAILABLE LIST: {length:   4  bytes:  3880}
+ACTUAL: 333)   [  0] head @ 0x6120000000a8 {state: a  size:   200}
+ACTUAL: 334)   [  1] head @ 0x612000000000 {state: a  size:   128}
+ACTUAL: 335)   [  2] head @ 0x612000000360 {state: a  size:  3192}
+ACTUAL: 336)   [  3] head @ 0x610000000038 {state: E  size:     0}
+ACTUAL: 337) USED LIST: {length:   0  bytes:   112}
+EXPECT: 331)   size:       472 (total: 0x200)
+EXPECT: 332)   prev:       0x610000000018
+ACTUAL: 341)   size:       128 (total: 0xa8)
+ACTUAL: 342)   prev:       0x6120000000a8
+EXPECT: 335)   foot:       0x6120000001f8
+EXPECT: 336)   foot->size: 472
+EXPECT: 337) [  1] @ 0x612000000200
+EXPECT: 338)   state:      u
+EXPECT: 339)   size:       312 (total: 0x160)
+EXPECT: 340)   prev:       0x610000000078
+EXPECT: 341)   next:       0x610000000098
+EXPECT: 342)   user:       0x612000000220
+EXPECT: 343)   foot:       0x612000000358
+EXPECT: 344)   foot->size: 312
+EXPECT: 345) [  2] @ 0x612000000360
+EXPECT: 346)   state:      a
+EXPECT: 347)   size:       3192 (total: 0xca0)
+EXPECT: 348)   prev:       0x612000000000
+EXPECT: 349)   next:       0x610000000038
+EXPECT: 350)   user:       0x612000000380
+EXPECT: 351)   foot:       0x612000000ff8
+EXPECT: 352)   foot->size: 3192
+EXPECT: 353) 
+EXPECT: 354) 
+EXPECT: 355) FREE 3
+EXPECT: 356) HEAP STATS (overhead per node: 40)
+EXPECT: 357) heap_start:  0x612000000000
+EXPECT: 358) heap_end:    0x612000001000
+EXPECT: 359) total_bytes: 4096
+EXPECT: 360) AVAILABLE LIST: {length:   1  bytes:  4096}
+EXPECT: 361)   [  0] head @ 0x612000000000 {state: a  size:  4056}
+EXPECT: 362) USED LIST: {length:   0  bytes:     0}
+EXPECT: 363) HEAP BLOCKS:
+EXPECT: 364) [  0] @ 0x612000000000
+ACTUAL: 345)   foot:       0x6120000000a0
+ACTUAL: 346)   foot->size: 128
+ACTUAL: 347) [  1] @ 0x6120000000a8
+EXPECT: 366)   size:       4056 (total: 0x1000)
+ACTUAL: 349)   size:       200 (total: 0xf0)
+EXPECT: 368)   next:       0x610000000038
+EXPECT: 369)   user:       0x612000000020
+EXPECT: 370)   foot:       0x612000000ff8
+EXPECT: 371)   foot->size: 4056
+EXPECT: 372) 
+ACTUAL: 351)   next:       0x612000000000
+ACTUAL: 352)   user:       0x6120000000c8
+ACTUAL: 353)   foot:       0x612000000190
+ACTUAL: 354)   foot->size: 200
+ACTUAL: 355) [  2] @ 0x612000000198
+ACTUAL: 356)   state:      a
+ACTUAL: 357)   size:       304 (total: 0x158)
+ACTUAL: 358)   prev:       0x612000000200
+ACTUAL: 359)   next:       0x610000000098
+ACTUAL: 360)   user:       0x6120000001b8
+ACTUAL: 361)   foot:       0x6120000002e8
+ACTUAL: 362)   foot->size: 0
+ACTUAL: 363) [  3] @ 0x6120000002f0
+ACTUAL: 364)   state:      
+ACTUAL: 365)   size:       0 (total: 0x28)
+ACTUAL: 366)   prev:       (nil)
+ACTUAL: 367)   next:       (nil)
+ACTUAL: 368)   user:       0x612000000310
+ACTUAL: 369)   foot:       0x612000000310
+ACTUAL: 370)   foot->size: 0
+ACTUAL: 371) [  4] @ 0x612000000318
+ACTUAL: 372)   state:      
+ACTUAL: 373)   size:       0 (total: 0x28)
+ACTUAL: 374)   prev:       (nil)
+ACTUAL: 375)   next:       (nil)
+ACTUAL: 376)   user:       0x612000000338
+ACTUAL: 377)   foot:       0x612000000338
+ACTUAL: 378)   foot->size: 0
+ACTUAL: 379) [  5] @ 0x612000000340
+ACTUAL: 380)   state:      
+ACTUAL: 381)   size:       0 (total: 0x28)
+ACTUAL: 382)   prev:       0x138
+ACTUAL: 383)   next:       (nil)
+ACTUAL: 384)   user:       0x612000000360
+ACTUAL: 385)   foot:       0x612000000360
+ACTUAL: 386)   foot->size: 3192
+ACTUAL: 387) [  6] @ 0x612000000368
+ACTUAL: 388)   state:      8
+ACTUAL: 389)   size:       97 (total: 0x89)
+ACTUAL: 390)   prev:       (nil)
+ACTUAL: 391)   next:       0x612000000000
+ACTUAL: 392)   user:       0x612000000388
+ACTUAL: 393)   foot:       0x6120000003e9
+ACTUAL: 394)   foot->size: 0
+ACTUAL: 395) [  7] @ 0x6120000003f1
+ACTUAL: 396)   state:      
+ACTUAL: 397)   size:       0 (total: 0x28)
+ACTUAL: 398)   prev:       (nil)
+ACTUAL: 399)   next:       (nil)
+ACTUAL: 400)   user:       0x612000000411
+ACTUAL: 401)   foot:       0x612000000411
+ACTUAL: 402)   foot->size: 0
+ACTUAL: 403) [  8] @ 0x612000000419
+ACTUAL: 404)   state:      
+ACTUAL: 405)   size:       0 (total: 0x28)
+ACTUAL: 406)   prev:       (nil)
+ACTUAL: 407)   next:       (nil)
+ACTUAL: 408)   user:       0x612000000439
+ACTUAL: 409)   foot:       0x612000000439
+ACTUAL: 410)   foot->size: 0
+ACTUAL: 411) [  9] @ 0x612000000441
+ACTUAL: 412)   state:      
+ACTUAL: 413)   size:       0 (total: 0x28)
+ACTUAL: 414)   prev:       (nil)
+ACTUAL: 415)   next:       (nil)
+ACTUAL: 416)   user:       0x612000000461
+ACTUAL: 417)   foot:       0x612000000461
+ACTUAL: 418)   foot->size: 0
+ACTUAL: 419) [ 10] @ 0x612000000469
+ACTUAL: 420)   state:      
+ACTUAL: 421)   size:       0 (total: 0x28)
+ACTUAL: 422)   prev:       (nil)
+ACTUAL: 423)   next:       (nil)
+ACTUAL: 424)   user:       0x612000000489
+ACTUAL: 425)   foot:       0x612000000489
+ACTUAL: 426)   foot->size: 0
+ACTUAL: 427) [ 11] @ 0x612000000491
+ACTUAL: 428)   state:      
+ACTUAL: 429)   size:       0 (total: 0x28)
+ACTUAL: 430)   prev:       (nil)
+ACTUAL: 431)   next:       (nil)
+ACTUAL: 432)   user:       0x6120000004b1
+ACTUAL: 433)   foot:       0x6120000004b1
+ACTUAL: 434)   foot->size: 0
+ACTUAL: 435) [ 12] @ 0x6120000004b9
+ACTUAL: 436)   state:      
+ACTUAL: 437)   size:       0 (total: 0x28)
+ACTUAL: 438)   prev:       (nil)
+ACTUAL: 439)   next:       (nil)
+ACTUAL: 440)   user:       0x6120000004d9
+ACTUAL: 441)   foot:       0x6120000004d9
+ACTUAL: 442)   foot->size: 0
+ACTUAL: 443) [ 13] @ 0x6120000004e1
+ACTUAL: 444)   state:      
+ACTUAL: 445)   size:       0 (total: 0x28)
+ACTUAL: 446)   prev:       (nil)
+ACTUAL: 447)   next:       (nil)
+ACTUAL: 448)   user:       0x612000000501
+ACTUAL: 449)   foot:       0x612000000501
+ACTUAL: 450)   foot->size: 0
+ACTUAL: 451) [ 14] @ 0x612000000509
+ACTUAL: 452)   state:      
+ACTUAL: 453)   size:       0 (total: 0x28)
+ACTUAL: 454)   prev:       (nil)
+ACTUAL: 455)   next:       (nil)
+ACTUAL: 456)   user:       0x612000000529
+ACTUAL: 457)   foot:       0x612000000529
+ACTUAL: 458)   foot->size: 0
+ACTUAL: 459) [ 15] @ 0x612000000531
+ACTUAL: 460)   state:      
+ACTUAL: 461)   size:       0 (total: 0x28)
+ACTUAL: 462)   prev:       (nil)
+ACTUAL: 463)   next:       (nil)
+ACTUAL: 464)   user:       0x612000000551
+ACTUAL: 465)   foot:       0x612000000551
+ACTUAL: 466)   foot->size: 0
+ACTUAL: 467) [ 16] @ 0x612000000559
+ACTUAL: 468)   state:      
+ACTUAL: 469)   size:       0 (total: 0x28)
+ACTUAL: 470)   prev:       (nil)
+ACTUAL: 471)   next:       (nil)
+ACTUAL: 472)   user:       0x612000000579
+ACTUAL: 473)   foot:       0x612000000579
+ACTUAL: 474)   foot->size: 0
+ACTUAL: 475) [ 17] @ 0x612000000581
+ACTUAL: 476)   state:      
+ACTUAL: 477)   size:       0 (total: 0x28)
+ACTUAL: 478)   prev:       (nil)
+ACTUAL: 479)   next:       (nil)
+ACTUAL: 480)   user:       0x6120000005a1
+ACTUAL: 481)   foot:       0x6120000005a1
+ACTUAL: 482)   foot->size: 0
+ACTUAL: 483) [ 18] @ 0x6120000005a9
+ACTUAL: 484)   state:      
+ACTUAL: 485)   size:       0 (total: 0x28)
+ACTUAL: 486)   prev:       (nil)
+ACTUAL: 487)   next:       (nil)
+ACTUAL: 488)   user:       0x6120000005c9
+ACTUAL: 489)   foot:       0x6120000005c9
+ACTUAL: 490)   foot->size: 0
+ACTUAL: 491) [ 19] @ 0x6120000005d1
+ACTUAL: 492)   state:      
+ACTUAL: 493)   size:       0 (total: 0x28)
+ACTUAL: 494)   prev:       (nil)
+ACTUAL: 495)   next:       (nil)
+ACTUAL: 496)   user:       0x6120000005f1
+ACTUAL: 497)   foot:       0x6120000005f1
+ACTUAL: 498)   foot->size: 0
+ACTUAL: 499) [ 20] @ 0x6120000005f9
+ACTUAL: 500)   state:      
+ACTUAL: 501)   size:       0 (total: 0x28)
+ACTUAL: 502)   prev:       (nil)
+ACTUAL: 503)   next:       (nil)
+ACTUAL: 504)   user:       0x612000000619
+ACTUAL: 505)   foot:       0x612000000619
+ACTUAL: 506)   foot->size: 0
+ACTUAL: 507) [ 21] @ 0x612000000621
+ACTUAL: 508)   state:      
+ACTUAL: 509)   size:       0 (total: 0x28)
+ACTUAL: 510)   prev:       (nil)
+ACTUAL: 511)   next:       (nil)
+ACTUAL: 512)   user:       0x612000000641
+ACTUAL: 513)   foot:       0x612000000641
+ACTUAL: 514)   foot->size: 0
+ACTUAL: 515) [ 22] @ 0x612000000649
+ACTUAL: 516)   state:      
+ACTUAL: 517)   size:       0 (total: 0x28)
+ACTUAL: 518)   prev:       (nil)
+ACTUAL: 519)   next:       (nil)
+ACTUAL: 520)   user:       0x612000000669
+ACTUAL: 521)   foot:       0x612000000669
+ACTUAL: 522)   foot->size: 0
+ACTUAL: 523) [ 23] @ 0x612000000671
+ACTUAL: 524)   state:      
+ACTUAL: 525)   size:       0 (total: 0x28)
+ACTUAL: 526)   prev:       (nil)
+ACTUAL: 527)   next:       (nil)
+ACTUAL: 528)   user:       0x612000000691
+ACTUAL: 529)   foot:       0x612000000691
+ACTUAL: 530)   foot->size: 0
+ACTUAL: 531) [ 24] @ 0x612000000699
+ACTUAL: 532)   state:      
+ACTUAL: 533)   size:       0 (total: 0x28)
+ACTUAL: 534)   prev:       (nil)
+ACTUAL: 535)   next:       (nil)
+ACTUAL: 536)   user:       0x6120000006b9
+ACTUAL: 537)   foot:       0x6120000006b9
+ACTUAL: 538)   foot->size: 0
+ACTUAL: 539) [ 25] @ 0x6120000006c1
+ACTUAL: 540)   state:      
+ACTUAL: 541)   size:       0 (total: 0x28)
+ACTUAL: 542)   prev:       (nil)
+ACTUAL: 543)   next:       (nil)
+ACTUAL: 544)   user:       0x6120000006e1
+ACTUAL: 545)   foot:       0x6120000006e1
+ACTUAL: 546)   foot->size: 0
+ACTUAL: 547) [ 26] @ 0x6120000006e9
+ACTUAL: 548)   state:      
+ACTUAL: 549)   size:       0 (total: 0x28)
+ACTUAL: 550)   prev:       (nil)
+ACTUAL: 551)   next:       (nil)
+ACTUAL: 552)   user:       0x612000000709
+ACTUAL: 553)   foot:       0x612000000709
+ACTUAL: 554)   foot->size: 0
+ACTUAL: 555) [ 27] @ 0x612000000711
+ACTUAL: 556)   state:      
+ACTUAL: 557)   size:       0 (total: 0x28)
+ACTUAL: 558)   prev:       (nil)
+ACTUAL: 559)   next:       (nil)
+ACTUAL: 560)   user:       0x612000000731
+ACTUAL: 561)   foot:       0x612000000731
+ACTUAL: 562)   foot->size: 0
+ACTUAL: 563) [ 28] @ 0x612000000739
+ACTUAL: 564)   state:      
+ACTUAL: 565)   size:       0 (total: 0x28)
+ACTUAL: 566)   prev:       (nil)
+ACTUAL: 567)   next:       (nil)
+ACTUAL: 568)   user:       0x612000000759
+ACTUAL: 569)   foot:       0x612000000759
+ACTUAL: 570)   foot->size: 0
+ACTUAL: 571) [ 29] @ 0x612000000761
+ACTUAL: 572)   state:      
+ACTUAL: 573)   size:       0 (total: 0x28)
+ACTUAL: 574)   prev:       (nil)
+ACTUAL: 575)   next:       (nil)
+ACTUAL: 576)   user:       0x612000000781
+ACTUAL: 577)   foot:       0x612000000781
+ACTUAL: 578)   foot->size: 0
+ACTUAL: 579) [ 30] @ 0x612000000789
+ACTUAL: 580)   state:      
+ACTUAL: 581)   size:       0 (total: 0x28)
+ACTUAL: 582)   prev:       (nil)
+ACTUAL: 583)   next:       (nil)
+ACTUAL: 584)   user:       0x6120000007a9
+ACTUAL: 585)   foot:       0x6120000007a9
+ACTUAL: 586)   foot->size: 0
+ACTUAL: 587) [ 31] @ 0x6120000007b1
+ACTUAL: 588)   state:      
+ACTUAL: 589)   size:       0 (total: 0x28)
+ACTUAL: 590)   prev:       (nil)
+ACTUAL: 591)   next:       (nil)
+ACTUAL: 592)   user:       0x6120000007d1
+ACTUAL: 593)   foot:       0x6120000007d1
+ACTUAL: 594)   foot->size: 0
+ACTUAL: 595) [ 32] @ 0x6120000007d9
+ACTUAL: 596)   state:      
+ACTUAL: 597)   size:       0 (total: 0x28)
+ACTUAL: 598)   prev:       (nil)
+ACTUAL: 599)   next:       (nil)
+ACTUAL: 600)   user:       0x6120000007f9
+ACTUAL: 601)   foot:       0x6120000007f9
+ACTUAL: 602)   foot->size: 0
+ACTUAL: 603) [ 33] @ 0x612000000801
+ACTUAL: 604)   state:      
+ACTUAL: 605)   size:       0 (total: 0x28)
+ACTUAL: 606)   prev:       (nil)
+ACTUAL: 607)   next:       (nil)
+ACTUAL: 608)   user:       0x612000000821
+ACTUAL: 609)   foot:       0x612000000821
+ACTUAL: 610)   foot->size: 0
+ACTUAL: 611) [ 34] @ 0x612000000829
+ACTUAL: 612)   state:      
+ACTUAL: 613)   size:       0 (total: 0x28)
+ACTUAL: 614)   prev:       (nil)
+ACTUAL: 615)   next:       (nil)
+ACTUAL: 616)   user:       0x612000000849
+ACTUAL: 617)   foot:       0x612000000849
+ACTUAL: 618)   foot->size: 0
+ACTUAL: 619) [ 35] @ 0x612000000851
+ACTUAL: 620)   state:      
+ACTUAL: 621)   size:       0 (total: 0x28)
+ACTUAL: 622)   prev:       (nil)
+ACTUAL: 623)   next:       (nil)
+ACTUAL: 624)   user:       0x612000000871
+ACTUAL: 625)   foot:       0x612000000871
+ACTUAL: 626)   foot->size: 0
+ACTUAL: 627) [ 36] @ 0x612000000879
+ACTUAL: 628)   state:      
+ACTUAL: 629)   size:       0 (total: 0x28)
+ACTUAL: 630)   prev:       (nil)
+ACTUAL: 631)   next:       (nil)
+ACTUAL: 632)   user:       0x612000000899
+ACTUAL: 633)   foot:       0x612000000899
+ACTUAL: 634)   foot->size: 0
+ACTUAL: 635) [ 37] @ 0x6120000008a1
+ACTUAL: 636)   state:      
+ACTUAL: 637)   size:       0 (total: 0x28)
+ACTUAL: 638)   prev:       (nil)
+ACTUAL: 639)   next:       (nil)
+ACTUAL: 640)   user:       0x6120000008c1
+ACTUAL: 641)   foot:       0x6120000008c1
+ACTUAL: 642)   foot->size: 0
+ACTUAL: 643) [ 38] @ 0x6120000008c9
+ACTUAL: 644)   state:      
+ACTUAL: 645)   size:       0 (total: 0x28)
+ACTUAL: 646)   prev:       (nil)
+ACTUAL: 647)   next:       (nil)
+ACTUAL: 648)   user:       0x6120000008e9
+ACTUAL: 649)   foot:       0x6120000008e9
+ACTUAL: 650)   foot->size: 0
+ACTUAL: 651) [ 39] @ 0x6120000008f1
+ACTUAL: 652)   state:      
+ACTUAL: 653)   size:       0 (total: 0x28)
+ACTUAL: 654)   prev:       (nil)
+ACTUAL: 655)   next:       (nil)
+ACTUAL: 656)   user:       0x612000000911
+ACTUAL: 657)   foot:       0x612000000911
+ACTUAL: 658)   foot->size: 0
+ACTUAL: 659) [ 40] @ 0x612000000919
+ACTUAL: 660)   state:      
+ACTUAL: 661)   size:       0 (total: 0x28)
+ACTUAL: 662)   prev:       (nil)
+ACTUAL: 663)   next:       (nil)
+ACTUAL: 664)   user:       0x612000000939
+ACTUAL: 665)   foot:       0x612000000939
+ACTUAL: 666)   foot->size: 0
+ACTUAL: 667) [ 41] @ 0x612000000941
+ACTUAL: 668)   state:      
+ACTUAL: 669)   size:       0 (total: 0x28)
+ACTUAL: 670)   prev:       (nil)
+ACTUAL: 671)   next:       (nil)
+ACTUAL: 672)   user:       0x612000000961
+ACTUAL: 673)   foot:       0x612000000961
+ACTUAL: 674)   foot->size: 0
+ACTUAL: 675) [ 42] @ 0x612000000969
+ACTUAL: 676)   state:      
+ACTUAL: 677)   size:       0 (total: 0x28)
+ACTUAL: 678)   prev:       (nil)
+ACTUAL: 679)   next:       (nil)
+ACTUAL: 680)   user:       0x612000000989
+ACTUAL: 681)   foot:       0x612000000989
+ACTUAL: 682)   foot->size: 0
+ACTUAL: 683) [ 43] @ 0x612000000991
+ACTUAL: 684)   state:      
+ACTUAL: 685)   size:       0 (total: 0x28)
+ACTUAL: 686)   prev:       (nil)
+ACTUAL: 687)   next:       (nil)
+ACTUAL: 688)   user:       0x6120000009b1
+ACTUAL: 689)   foot:       0x6120000009b1
+ACTUAL: 690)   foot->size: 0
+ACTUAL: 691) [ 44] @ 0x6120000009b9
+ACTUAL: 692)   state:      
+ACTUAL: 693)   size:       0 (total: 0x28)
+ACTUAL: 694)   prev:       (nil)
+ACTUAL: 695)   next:       (nil)
+ACTUAL: 696)   user:       0x6120000009d9
+ACTUAL: 697)   foot:       0x6120000009d9
+ACTUAL: 698)   foot->size: 0
+ACTUAL: 699) [ 45] @ 0x6120000009e1
+ACTUAL: 700)   state:      
+ACTUAL: 701)   size:       0 (total: 0x28)
+ACTUAL: 702)   prev:       (nil)
+ACTUAL: 703)   next:       (nil)
+ACTUAL: 704)   user:       0x612000000a01
+ACTUAL: 705)   foot:       0x612000000a01
+ACTUAL: 706)   foot->size: 0
+ACTUAL: 707) [ 46] @ 0x612000000a09
+ACTUAL: 708)   state:      
+ACTUAL: 709)   size:       0 (total: 0x28)
+ACTUAL: 710)   prev:       (nil)
+ACTUAL: 711)   next:       (nil)
+ACTUAL: 712)   user:       0x612000000a29
+ACTUAL: 713)   foot:       0x612000000a29
+ACTUAL: 714)   foot->size: 0
+ACTUAL: 715) [ 47] @ 0x612000000a31
+ACTUAL: 716)   state:      
+ACTUAL: 717)   size:       0 (total: 0x28)
+ACTUAL: 718)   prev:       (nil)
+ACTUAL: 719)   next:       (nil)
+ACTUAL: 720)   user:       0x612000000a51
+ACTUAL: 721)   foot:       0x612000000a51
+ACTUAL: 722)   foot->size: 0
+ACTUAL: 723) [ 48] @ 0x612000000a59
+ACTUAL: 724)   state:      
+ACTUAL: 725)   size:       0 (total: 0x28)
+ACTUAL: 726)   prev:       (nil)
+ACTUAL: 727)   next:       (nil)
+ACTUAL: 728)   user:       0x612000000a79
+ACTUAL: 729)   foot:       0x612000000a79
+ACTUAL: 730)   foot->size: 0
+ACTUAL: 731) [ 49] @ 0x612000000a81
+ACTUAL: 732)   state:      
+ACTUAL: 733)   size:       0 (total: 0x28)
+ACTUAL: 734)   prev:       (nil)
+ACTUAL: 735)   next:       (nil)
+ACTUAL: 736)   user:       0x612000000aa1
+ACTUAL: 737)   foot:       0x612000000aa1
+ACTUAL: 738)   foot->size: 0
+ACTUAL: 739) [ 50] @ 0x612000000aa9
+ACTUAL: 740)   state:      
+ACTUAL: 741)   size:       0 (total: 0x28)
+ACTUAL: 742)   prev:       (nil)
+ACTUAL: 743)   next:       (nil)
+ACTUAL: 744)   user:       0x612000000ac9
+ACTUAL: 745)   foot:       0x612000000ac9
+ACTUAL: 746)   foot->size: 0
+ACTUAL: 747) [ 51] @ 0x612000000ad1
+ACTUAL: 748)   state:      
+ACTUAL: 749)   size:       0 (total: 0x28)
+ACTUAL: 750)   prev:       (nil)
+ACTUAL: 751)   next:       (nil)
+ACTUAL: 752)   user:       0x612000000af1
+ACTUAL: 753)   foot:       0x612000000af1
+ACTUAL: 754)   foot->size: 0
+ACTUAL: 755) [ 52] @ 0x612000000af9
+ACTUAL: 756)   state:      
+ACTUAL: 757)   size:       0 (total: 0x28)
+ACTUAL: 758)   prev:       (nil)
+ACTUAL: 759)   next:       (nil)
+ACTUAL: 760)   user:       0x612000000b19
+ACTUAL: 761)   foot:       0x612000000b19
+ACTUAL: 762)   foot->size: 0
+ACTUAL: 763) [ 53] @ 0x612000000b21
+ACTUAL: 764)   state:      
+ACTUAL: 765)   size:       0 (total: 0x28)
+ACTUAL: 766)   prev:       (nil)
+ACTUAL: 767)   next:       (nil)
+ACTUAL: 768)   user:       0x612000000b41
+ACTUAL: 769)   foot:       0x612000000b41
+ACTUAL: 770)   foot->size: 0
+ACTUAL: 771) [ 54] @ 0x612000000b49
+ACTUAL: 772)   state:      
+ACTUAL: 773)   size:       0 (total: 0x28)
+ACTUAL: 774)   prev:       (nil)
+ACTUAL: 775)   next:       (nil)
+ACTUAL: 776)   user:       0x612000000b69
+ACTUAL: 777)   foot:       0x612000000b69
+ACTUAL: 778)   foot->size: 0
+ACTUAL: 779) [ 55] @ 0x612000000b71
+ACTUAL: 780)   state:      
+ACTUAL: 781)   size:       0 (total: 0x28)
+ACTUAL: 782)   prev:       (nil)
+ACTUAL: 783)   next:       (nil)
+ACTUAL: 784)   user:       0x612000000b91
+ACTUAL: 785)   foot:       0x612000000b91
+ACTUAL: 786)   foot->size: 0
+ACTUAL: 787) [ 56] @ 0x612000000b99
+ACTUAL: 788)   state:      
+ACTUAL: 789)   size:       0 (total: 0x28)
+ACTUAL: 790)   prev:       (nil)
+ACTUAL: 791)   next:       (nil)
+ACTUAL: 792)   user:       0x612000000bb9
+ACTUAL: 793)   foot:       0x612000000bb9
+ACTUAL: 794)   foot->size: 0
+ACTUAL: 795) [ 57] @ 0x612000000bc1
+ACTUAL: 796)   state:      
+ACTUAL: 797)   size:       0 (total: 0x28)
+ACTUAL: 798)   prev:       (nil)
+ACTUAL: 799)   next:       (nil)
+ACTUAL: 800)   user:       0x612000000be1
+ACTUAL: 801)   foot:       0x612000000be1
+ACTUAL: 802)   foot->size: 0
+ACTUAL: 803) [ 58] @ 0x612000000be9
+ACTUAL: 804)   state:      
+ACTUAL: 805)   size:       0 (total: 0x28)
+ACTUAL: 806)   prev:       (nil)
+ACTUAL: 807)   next:       (nil)
+ACTUAL: 808)   user:       0x612000000c09
+ACTUAL: 809)   foot:       0x612000000c09
+ACTUAL: 810)   foot->size: 0
+ACTUAL: 811) [ 59] @ 0x612000000c11
+ACTUAL: 812)   state:      
+ACTUAL: 813)   size:       0 (total: 0x28)
+ACTUAL: 814)   prev:       (nil)
+ACTUAL: 815)   next:       (nil)
+ACTUAL: 816)   user:       0x612000000c31
+ACTUAL: 817)   foot:       0x612000000c31
+ACTUAL: 818)   foot->size: 0
+ACTUAL: 819) [ 60] @ 0x612000000c39
+ACTUAL: 820)   state:      
+ACTUAL: 821)   size:       0 (total: 0x28)
+ACTUAL: 822)   prev:       (nil)
+ACTUAL: 823)   next:       (nil)
+ACTUAL: 824)   user:       0x612000000c59
+ACTUAL: 825)   foot:       0x612000000c59
+ACTUAL: 826)   foot->size: 0
+ACTUAL: 827) [ 61] @ 0x612000000c61
+ACTUAL: 828)   state:      
+ACTUAL: 829)   size:       0 (total: 0x28)
+ACTUAL: 830)   prev:       (nil)
+ACTUAL: 831)   next:       (nil)
+ACTUAL: 832)   user:       0x612000000c81
+ACTUAL: 833)   foot:       0x612000000c81
+ACTUAL: 834)   foot->size: 0
+ACTUAL: 835) [ 62] @ 0x612000000c89
+ACTUAL: 836)   state:      
+ACTUAL: 837)   size:       0 (total: 0x28)
+ACTUAL: 838)   prev:       (nil)
+ACTUAL: 839)   next:       (nil)
+ACTUAL: 840)   user:       0x612000000ca9
+ACTUAL: 841)   foot:       0x612000000ca9
+ACTUAL: 842)   foot->size: 0
+ACTUAL: 843) [ 63] @ 0x612000000cb1
+ACTUAL: 844)   state:      
+ACTUAL: 845)   size:       0 (total: 0x28)
+ACTUAL: 846)   prev:       (nil)
+ACTUAL: 847)   next:       (nil)
+ACTUAL: 848)   user:       0x612000000cd1
+ACTUAL: 849)   foot:       0x612000000cd1
+ACTUAL: 850)   foot->size: 0
+ACTUAL: 851) [ 64] @ 0x612000000cd9
+ACTUAL: 852)   state:      
+ACTUAL: 853)   size:       0 (total: 0x28)
+ACTUAL: 854)   prev:       (nil)
+ACTUAL: 855)   next:       (nil)
+ACTUAL: 856)   user:       0x612000000cf9
+ACTUAL: 857)   foot:       0x612000000cf9
+ACTUAL: 858)   foot->size: 0
+ACTUAL: 859) [ 65] @ 0x612000000d01
+ACTUAL: 860)   state:      
+ACTUAL: 861)   size:       0 (total: 0x28)
+ACTUAL: 862)   prev:       (nil)
+ACTUAL: 863)   next:       (nil)
+ACTUAL: 864)   user:       0x612000000d21
+ACTUAL: 865)   foot:       0x612000000d21
+ACTUAL: 866)   foot->size: 0
+ACTUAL: 867) [ 66] @ 0x612000000d29
+ACTUAL: 868)   state:      
+ACTUAL: 869)   size:       0 (total: 0x28)
+ACTUAL: 870)   prev:       (nil)
+ACTUAL: 871)   next:       (nil)
+ACTUAL: 872)   user:       0x612000000d49
+ACTUAL: 873)   foot:       0x612000000d49
+ACTUAL: 874)   foot->size: 0
+ACTUAL: 875) [ 67] @ 0x612000000d51
+ACTUAL: 876)   state:      
+ACTUAL: 877)   size:       0 (total: 0x28)
+ACTUAL: 878)   prev:       (nil)
+ACTUAL: 879)   next:       (nil)
+ACTUAL: 880)   user:       0x612000000d71
+ACTUAL: 881)   foot:       0x612000000d71
+ACTUAL: 882)   foot->size: 0
+ACTUAL: 883) [ 68] @ 0x612000000d79
+ACTUAL: 884)   state:      
+ACTUAL: 885)   size:       0 (total: 0x28)
+ACTUAL: 886)   prev:       (nil)
+ACTUAL: 887)   next:       (nil)
+ACTUAL: 888)   user:       0x612000000d99
+ACTUAL: 889)   foot:       0x612000000d99
+ACTUAL: 890)   foot->size: 0
+ACTUAL: 891) [ 69] @ 0x612000000da1
+ACTUAL: 892)   state:      
+ACTUAL: 893)   size:       0 (total: 0x28)
+ACTUAL: 894)   prev:       (nil)
+ACTUAL: 895)   next:       (nil)
+ACTUAL: 896)   user:       0x612000000dc1
+ACTUAL: 897)   foot:       0x612000000dc1
+ACTUAL: 898)   foot->size: 0
+ACTUAL: 899) [ 70] @ 0x612000000dc9
+ACTUAL: 900)   state:      
+ACTUAL: 901)   size:       0 (total: 0x28)
+ACTUAL: 902)   prev:       (nil)
+ACTUAL: 903)   next:       (nil)
+ACTUAL: 904)   user:       0x612000000de9
+ACTUAL: 905)   foot:       0x612000000de9
+ACTUAL: 906)   foot->size: 0
+ACTUAL: 907) [ 71] @ 0x612000000df1
+ACTUAL: 908)   state:      
+ACTUAL: 909)   size:       0 (total: 0x28)
+ACTUAL: 910)   prev:       (nil)
+ACTUAL: 911)   next:       (nil)
+ACTUAL: 912)   user:       0x612000000e11
+ACTUAL: 913)   foot:       0x612000000e11
+ACTUAL: 914)   foot->size: 0
+ACTUAL: 915) [ 72] @ 0x612000000e19
+ACTUAL: 916)   state:      
+ACTUAL: 917)   size:       0 (total: 0x28)
+ACTUAL: 918)   prev:       (nil)
+ACTUAL: 919)   next:       (nil)
+ACTUAL: 920)   user:       0x612000000e39
+ACTUAL: 921)   foot:       0x612000000e39
+ACTUAL: 922)   foot->size: 0
+ACTUAL: 923) [ 73] @ 0x612000000e41
+ACTUAL: 924)   state:      
+ACTUAL: 925)   size:       0 (total: 0x28)
+ACTUAL: 926)   prev:       (nil)
+ACTUAL: 927)   next:       (nil)
+ACTUAL: 928)   user:       0x612000000e61
+ACTUAL: 929)   foot:       0x612000000e61
+ACTUAL: 930)   foot->size: 0
+ACTUAL: 931) [ 74] @ 0x612000000e69
+ACTUAL: 932)   state:      
+ACTUAL: 933)   size:       0 (total: 0x28)
+ACTUAL: 934)   prev:       (nil)
+ACTUAL: 935)   next:       (nil)
+ACTUAL: 936)   user:       0x612000000e89
+ACTUAL: 937)   foot:       0x612000000e89
+ACTUAL: 938)   foot->size: 0
+ACTUAL: 939) [ 75] @ 0x612000000e91
+ACTUAL: 940)   state:      
+ACTUAL: 941)   size:       0 (total: 0x28)
+ACTUAL: 942)   prev:       (nil)
+ACTUAL: 943)   next:       (nil)
+ACTUAL: 944)   user:       0x612000000eb1
+ACTUAL: 945)   foot:       0x612000000eb1
+ACTUAL: 946)   foot->size: 0
+ACTUAL: 947) [ 76] @ 0x612000000eb9
+ACTUAL: 948)   state:      
+ACTUAL: 949)   size:       0 (total: 0x28)
+ACTUAL: 950)   prev:       (nil)
+ACTUAL: 951)   next:       (nil)
+ACTUAL: 952)   user:       0x612000000ed9
+ACTUAL: 953)   foot:       0x612000000ed9
+ACTUAL: 954)   foot->size: 0
+ACTUAL: 955) [ 77] @ 0x612000000ee1
+ACTUAL: 956)   state:      
+ACTUAL: 957)   size:       0 (total: 0x28)
+ACTUAL: 958)   prev:       (nil)
+ACTUAL: 959)   next:       (nil)
+ACTUAL: 960)   user:       0x612000000f01
+ACTUAL: 961)   foot:       0x612000000f01
+ACTUAL: 962)   foot->size: 0
+ACTUAL: 963) [ 78] @ 0x612000000f09
+ACTUAL: 964)   state:      
+ACTUAL: 965)   size:       0 (total: 0x28)
+ACTUAL: 966)   prev:       (nil)
+ACTUAL: 967)   next:       (nil)
+ACTUAL: 968)   user:       0x612000000f29
+ACTUAL: 969)   foot:       0x612000000f29
+ACTUAL: 970)   foot->size: 0
+ACTUAL: 971) [ 79] @ 0x612000000f31
+ACTUAL: 972)   state:      
+ACTUAL: 973)   size:       0 (total: 0x28)
+ACTUAL: 974)   prev:       (nil)
+ACTUAL: 975)   next:       (nil)
+ACTUAL: 976)   user:       0x612000000f51
+ACTUAL: 977)   foot:       0x612000000f51
+ACTUAL: 978)   foot->size: 0
+ACTUAL: 979) [ 80] @ 0x612000000f59
+ACTUAL: 980)   state:      
+ACTUAL: 981)   size:       0 (total: 0x28)
+ACTUAL: 982)   prev:       (nil)
+ACTUAL: 983)   next:       (nil)
+ACTUAL: 984)   user:       0x612000000f79
+ACTUAL: 985)   foot:       0x612000000f79
+ACTUAL: 986)   foot->size: 0
+ACTUAL: 987) [ 81] @ 0x612000000f81
+ACTUAL: 988)   state:      
+ACTUAL: 989)   size:       0 (total: 0x28)
+ACTUAL: 990)   prev:       (nil)
+ACTUAL: 991)   next:       (nil)
+ACTUAL: 992)   user:       0x612000000fa1
+ACTUAL: 993)   foot:       0x612000000fa1
+ACTUAL: 994)   foot->size: 0
+ACTUAL: 995) [ 82] @ 0x612000000fa9
+ACTUAL: 996)   state:      
+ACTUAL: 997)   size:       0 (total: 0x28)
+ACTUAL: 998)   prev:       (nil)
+ACTUAL: 999)   next:       (nil)
+ACTUAL:1000)   user:       0x612000000fc9
+ACTUAL:1001)   foot:       0x612000000fc9
+ACTUAL:1002)   foot->size: 0
+ACTUAL:1003) [ 83] @ 0x612000000fd1
+ACTUAL:1004)   state:      
+ACTUAL:1005)   size:       0 (total: 0x28)
+ACTUAL:1006)   prev:       (nil)
+ACTUAL:1007)   next:       (nil)
+ACTUAL:1008)   user:       0x612000000ff1
+ACTUAL:1009)   foot:       0x612000000ff1
+ACTUAL:1010)   foot->size: 8646911284551352320
+ACTUAL:1011) [ 84] @ 
+
+--- Valgrind Log from: test-results/raw/el_malloc-05-valgrd.tmp ---
+==2797420== Memcheck, a memory error detector
+==2797420== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2797420== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==2797420== Command: ./test_el_malloc Four\ Allocs\ Free\ Ver1
+==2797420== Parent PID: 2797419
+==2797420== 
+==2797420== Invalid read of size 8
+==2797420==    at 0x10A8E2: el_get_footer (el_malloc.c:90)
+==2797420==    by 0x10A9FC: el_print_block (el_malloc.c:200)
+==2797420==    by 0x10ABF0: el_print_stats (el_malloc.c:228)
+==2797420==    by 0x109C48: main (test_el_malloc.c:166)
+==2797420==  Address 0x612000000ff9 is in a rw- anonymous segment
+==2797420== 
+==2797420== 
+==2797420== Process terminating with default action of signal 11 (SIGSEGV)
+==2797420==  Access not within mapped region at address 0x612000001000
+==2797420==    at 0x10A8E2: el_get_footer (el_malloc.c:90)
+==2797420==    by 0x10A9FC: el_print_block (el_malloc.c:200)
+==2797420==    by 0x10ABF0: el_print_stats (el_malloc.c:228)
+==2797420==    by 0x109C48: main (test_el_malloc.c:166)
+==2797420==  If you believe this happened as a result of a stack
+==2797420==  overflow in your program's main thread (unlikely but
+==2797420==  possible), you can try to increase the size of the
+==2797420==  main thread stack using the --main-stacksize= flag.
+==2797420==  The main thread stack size used in this run was 8388608.
+==2797420== 
+==2797420== HEAP SUMMARY:
+==2797420==     in use at exit: 0 bytes in 0 blocks
+==2797420==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==2797420== 
+==2797420== All heap blocks were freed -- no leaks are possible
+==2797420== 
+==2797420== For lists of detected and suppressed errors, rerun with: -s
+==2797420== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+

@@ -1,0 +1,16 @@
+{
+    // Checks that allocation of blocks close to the size available in
+    // the block does not split the block.
+    void *ptr[16] = {}; int len = 0;
+
+    ptr[len++] = el_malloc(2008); // split
+    ptr[len++] = el_malloc(2008); // NOT split
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+    printf("\nUSED BLOCKS 1\n"); el_print_stats(); printf("\n");
+
+    el_free(ptr[0]); ptr[0] = NULL;
+    ptr[len++] = el_malloc(1008); // split, 1000 left
+    ptr[len++] = el_malloc(980);  // NOT split
+    printf("POINTERS\n"); print_ptrs(ptr, len);
+    printf("\nUSED BLOCKS 2\n"); el_print_stats(); printf("\n");
+}

@@ -1,0 +1,59 @@
+{
+    // Tests that an allocation correctly splits the first single
+    // block into 2 blocks, one used and one available
+
+    printf("BEFORE MALLOC 0\n"); el_print_stats(); printf("\n");
+
+    void *p0 = el_malloc(128);
+    printf("AFTER MALLOC 0\n"); el_print_stats(); printf("\n");
+
+    printf("POINTERS\n");
+    print_ptr("p0",p0);
+}
+BEFORE MALLOC 0
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  4096}
+  [  0] head @ 0x612000000000 {state: a  size:  4056}
+USED LIST: {length:   0  bytes:     0}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      a
+  size:       4056 (total: 0x1000)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x612000000020
+  foot:       0x612000000ff8
+  foot->size: 4056
+
+AFTER MALLOC 0
+HEAP STATS (overhead per node: 40)
+heap_start:  0x612000000000
+heap_end:    0x612000001000
+total_bytes: 4096
+AVAILABLE LIST: {length:   1  bytes:  3928}
+  [  0] head @ 0x6120000000a8 {state: a  size:  3888}
+USED LIST: {length:   1  bytes:   168}
+  [  0] head @ 0x612000000000 {state: u  size:   128}
+HEAP BLOCKS:
+[  0] @ 0x612000000000
+  state:      u
+  size:       128 (total: 0xa8)
+  prev:       0x610000000078
+  next:       0x610000000098
+  user:       0x612000000020
+  foot:       0x6120000000a0
+  foot->size: 128
+[  1] @ 0x6120000000a8
+  state:      a
+  size:       3888 (total: 0xf58)
+  prev:       0x610000000018
+  next:       0x610000000038
+  user:       0x6120000000c8
+  foot:       0x612000000ff8
+  foot->size: 3888
+
+POINTERS
+p0: 0x612000000020
